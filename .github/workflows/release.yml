@@ -69,6 +69,9 @@ jobs:
             if [ -z "$NOTES" ]; then
               NOTES=$(awk "/^## ${ESCAPED_VER}[[:space:]]/{found=1; next} found && /^## /{exit} found && /^# /{exit} found{print}" CHANGELOG.md)
             fi
+            if [ -z "$NOTES" ]; then
+              NOTES=$(awk -v ver="$VERSION" 'index($0, "## [" ver "](") == 1 {found=1; next} found && /^## /{exit} found && /^# /{exit} found{print}' CHANGELOG.md)
+            fi
           else
             ESCAPED_TAG=$(printf '%s' "$TAG" | sed 's/[[\\.^$*+?(){}|]/\\&/g; s/\//\\\//g')
             NOTES=$(awk "/^## ${ESCAPED_TAG}[[:space:]]/{found=1; next} found && /^## [^#]/{exit} found{print}" CHANGELOG.md)
