@@ -1,7 +1,6 @@
 packages:
   - old/*
   - packages/*
-  - configs/*
 
 overrides:
   unconfig: "7.3.2"
