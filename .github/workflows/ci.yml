@@ -1,0 +1,63 @@
+name: CI
+
+env:
+  # https://turborepo.com/docs/crafting-your-repository/constructing-ci#enabling-remote-caching
+  # https://vercel.com/docs/monorepos/remote-caching#use-remote-caching-from-external-ci/cd
+  TURBO_TOKEN: ${{ secrets.vercel_token }}
+  TURBO_TEAM: "ruancat-projects"
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tester:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: pnpm
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 检查工具版本
+        run: |
+          node -v
+          pnpm -v
+          pnpm exec turbo --version
+
+      - name: turbo 登录远程缓存
+        if: ${{ env.TURBO_TOKEN != '' }}
+        run: pnpm exec turbo login --token="${{ env.TURBO_TOKEN }}" --team="${{ env.TURBO_TEAM }}"
+
+      - name: turbo 绑定远程项目
+        if: ${{ env.TURBO_TOKEN != '' }}
+        run: pnpm exec turbo link --token="${{ env.TURBO_TOKEN }}" --scope="${{ env.TURBO_TEAM }}" --yes
+
+      - name: 执行仓库自检
+        run: pnpm run ci

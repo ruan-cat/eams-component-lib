@@ -1,0 +1,69 @@
+# Dependencies
+node_modules
+**/node_modules/
+.pnpm-store
+.modules.yaml
+.pnpm-workspace-state*
+
+# Build output
+dist
+.output
+.nuxt
+.nitro
+*.tsbuildinfo
+
+# Turbo
+.turbo
+
+# Cache
+.cache
+.temp
+.eslintcache
+
+# Test coverage
+coverage
+.nyc_output
+
+# Environment
+!.env
+.env.local
+.env.*.local
+
+# IDE
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Source maps
+*.map
+*.js.map
+*.css.map
+*.d.ts.map
+
+# Lock files (only keep pnpm-lock.yaml)
+package-lock.json
+yarn.lock
+
+# Local AI collaboration artifacts
+.superpowers/
+
+# Local cache
+local_cache
+
+# Vite cache
+.vite
+.worktrees/
+!patches/
+!patches/*.patch
+
+# Generated type helpers
+auto-imports.d.ts
+components.d.ts
