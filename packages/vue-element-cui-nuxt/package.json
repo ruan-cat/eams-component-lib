@@ -3,7 +3,6 @@
 	"description": "EAMS Vue Element CUI Nuxt Documentation Site",
 	"version": "2.0.0",
 	"type": "module",
-	"private": true,
 	"scripts": {
 		"dev": "nuxt dev",
 		"predev": "nuxt prepare",
