@@ -1,5 +1,4 @@
 packages:
-  - apps/*
   - old/*
   - packages/*
   - configs/*
@@ -13,7 +12,6 @@ overrides:
 onlyBuiltDependencies:
   - "@carbon/icons"
   - "@parcel/watcher"
-  - "@uni-helper/unocss-preset-uni"
   - core-js
   - core-js-pure
   - ejs
