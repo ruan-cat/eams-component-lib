@@ -1,3 +1,11 @@
+## [1.0.6](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.5...v1.0.6) (2026-04-09)
+
+- 🔨 build(release)!: 对齐 01s 的 relizy 与 bumpp 配置 ([58d41cb](https://github.com/ruan-cat/eams-component-lib/commit/58d41cbfb67db55b434ca0c1e8bb8d7294531df4))
+
+### BREAKING CHANGES
+
+- 根包发版命令集已切换为 01s 风格，原有 release:relizy、release:changelog 等命名不再保留，changelogithub.config.ts 现恢复为 .ts 扩展导入并依赖 allowImportingTsExtensions。
+
 ## [1.0.5](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.4...v1.0.5) (2026-04-09)
 
 ## [1.0.4](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.3...v1.0.4) (2026-04-09)
