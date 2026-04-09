@@ -1,0 +1,62 @@
+name: Release
+
+env:
+  TURBO_TOKEN: ${{ secrets.vercel_token }}
+  TURBO_TEAM: "ruancat-projects"
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: pnpm
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 检查工具版本
+        run: |
+          node -v
+          pnpm -v
+          pnpm exec turbo --version
+
+      - name: turbo 登录远程缓存
+        if: ${{ env.TURBO_TOKEN != '' }}
+        run: pnpm exec turbo login --token="${{ env.TURBO_TOKEN }}" --team="${{ env.TURBO_TEAM }}"
+
+      - name: turbo 绑定远程项目
+        if: ${{ env.TURBO_TOKEN != '' }}
+        run: pnpm exec turbo link --token="${{ env.TURBO_TOKEN }}" --scope="${{ env.TURBO_TEAM }}" --yes
+
+      - name: 生成 GitHub Release 日志
+        run: pnpm dlx changelogithub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
