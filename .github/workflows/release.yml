@@ -48,6 +48,16 @@ jobs:
           pnpm -v
           pnpm exec turbo --version
 
+      - name: 计算根级发布区间
+        id: release_range
+        shell: bash
+        run: |
+          current_tag="${GITHUB_REF_NAME}"
+          previous_tag="$(git tag --list 'v*' --sort=-version:refname | grep -Fxv "$current_tag" | head -n 1 || true)"
+
+          echo "current_tag=$current_tag" >> "$GITHUB_OUTPUT"
+          echo "previous_tag=$previous_tag" >> "$GITHUB_OUTPUT"
+
       - name: turbo 登录远程缓存
         if: ${{ env.TURBO_TOKEN != '' }}
         run: pnpm exec turbo login --token="${{ env.TURBO_TOKEN }}" --team="${{ env.TURBO_TEAM }}"
@@ -57,6 +67,15 @@ jobs:
         run: pnpm exec turbo link --token="${{ env.TURBO_TOKEN }}" --scope="${{ env.TURBO_TEAM }}" --yes
 
       - name: 生成 GitHub Release 日志
-        run: pnpm dlx changelogithub
+        shell: bash
+        run: |
+          current_tag="${{ steps.release_range.outputs.current_tag }}"
+          previous_tag="${{ steps.release_range.outputs.previous_tag }}"
+
+          if [ -n "$previous_tag" ]; then
+            pnpm dlx changelogithub --from "$previous_tag" --to "$current_tag"
+          else
+            pnpm dlx changelogithub --from "$current_tag" --to "$current_tag"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
