@@ -1,3 +1,5 @@
+## [1.0.7](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.6...v1.0.7) (2026-04-09)
+
 ## [1.0.6](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.5...v1.0.6) (2026-04-09)
 
 - 🔨 build(release)!: 对齐 01s 的 relizy 与 bumpp 配置 ([58d41cb](https://github.com/ruan-cat/eams-component-lib/commit/58d41cbfb67db55b434ca0c1e8bb8d7294531df4))
