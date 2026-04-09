@@ -1,3 +1,5 @@
+<!-- 已完成 -->
+
 # Component Library Showcase Repo Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
@@ -60,6 +62,7 @@
 ### Task 1: Isolate Git Metadata Before Any File Changes
 
 **Files:**
+
 - Modify: Git metadata only (`.git/config`, local refs)
 - Verify: local refs and upstream state
 
@@ -153,6 +156,7 @@ This task only mutates local Git metadata. There are no tracked-file changes to 
 ### Task 2: Remove Business Documents and Business Apps
 
 **Files:**
+
 - Delete: `documents/**`
 - Delete: `eams-frontend-monorepo/apps/eams-frontend/**`
 - Delete: `eams-frontend-monorepo/apps/eams-fronttea/**`
@@ -241,6 +245,7 @@ Expected:
 ### Task 3: Flatten `eams-frontend-monorepo/` Into The Git Root
 
 **Files:**
+
 - Move: `eams-frontend-monorepo/.agent -> .agent`
 - Move: `eams-frontend-monorepo/.changeset -> .changeset`
 - Move: `eams-frontend-monorepo/.claude -> .claude`
@@ -470,6 +475,7 @@ Expected:
 ### Task 4: Prune Root Workspace Manifests and Lockfile
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `pnpm-workspace.yaml`
 - Modify: `pnpm-lock.yaml`
@@ -638,6 +644,7 @@ Expected:
 ### Task 5: Normalize Root Hooks, Ignore Rules, and EOL Policy
 
 **Files:**
+
 - Modify: `.gitignore`
 - Modify: `simple-git-hooks.mjs`
 - Modify: `prettier.config.mjs`
@@ -817,6 +824,7 @@ Expected:
 ### Task 6: Rewrite The Public Narrative and AI Memory Files
 
 **Files:**
+
 - Modify: `README.md`
 - Modify: `packages/vue-element-cui/README.md`
 - Modify: `packages/vue-element-cui-nuxt/README.md`
@@ -828,7 +836,7 @@ Expected:
 
 Replace the file with:
 
-```md
+````md
 # `eams-component-lib`
 
 一个面向开源展示与求职叙事的现代组件库 monorepo。
@@ -863,6 +871,7 @@ eams-component-lib/
 ├─ scripts/
 └─ configs/
 ```
+````
 
 ## 快速开始
 
@@ -881,19 +890,20 @@ pnpm --filter @eams-monorepo/vue-element-cui-nuxt dev
 ## License
 
 MIT
-```
+
+````plain
 
 Expected:
 
 ```log
 The root README no longer mentions teaching-management business apps or `documents/`.
-```
+````
 
 - [ ] **Step 2: Rewrite `packages/vue-element-cui/README.md` as a standalone component-library README**
 
 Replace the file with:
 
-```md
+````md
 # @eams-monorepo/vue-element-cui
 
 基于 Element Plus 的现代 Vue 3 组件库。
@@ -906,6 +916,7 @@ Replace the file with:
 ```bash
 pnpm add @eams-monorepo/vue-element-cui element-plus
 ```
+````
 
 ## 全量注册
 
@@ -957,19 +968,20 @@ pnpm --filter @eams-monorepo/vue-element-cui typecheck
 ## License
 
 MIT
-```
+
+````plain
 
 Expected:
 
 ```log
 The component README no longer says it mainly serves `apps/eams-frontend`.
-```
+````
 
 - [ ] **Step 3: Rewrite `packages/vue-element-cui-nuxt/README.md` as the showcase-site README**
 
 Replace the file with:
 
-```md
+````md
 # @eams-monorepo/vue-element-cui-nuxt
 
 `@eams-monorepo/vue-element-cui` 的展示站与文档站，基于 Nuxt 3 与 `shadcn-docs-nuxt`。
@@ -988,6 +1000,7 @@ pnpm --filter @eams-monorepo/vue-element-cui-nuxt build
 pnpm --filter @eams-monorepo/vue-element-cui-nuxt generate
 pnpm --filter @eams-monorepo/vue-element-cui-nuxt preview
 ```
+````
 
 ## 测试
 
@@ -1006,13 +1019,14 @@ pnpm --filter @eams-monorepo/vue-element-cui-nuxt test:watch
 
 - 开发环境：`http://localhost:3000`
 - 文档首页：`http://localhost:3000/docs/getting-started`
-```
+
+````plain
 
 Expected:
 
 ```log
 The docs-site README now describes a showcase site instead of a generic monorepo-sidecar package.
-```
+````
 
 - [ ] **Step 4: Patch the top sections of `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md`**
 
@@ -1077,6 +1091,7 @@ Expected:
 ### Task 7: Verify Structure, Tooling, and Build Health
 
 **Files:**
+
 - Verify only: working tree, build outputs, package scripts
 
 - [ ] **Step 1: Verify the final structure constraints**
