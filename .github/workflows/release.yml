@@ -66,6 +66,9 @@ jobs:
             VERSION="${TAG#v}"
             ESCAPED_VER=$(printf '%s' "$VERSION" | sed 's/[[\\.^$*+?(){}|]/\\&/g')
             NOTES=$(awk "/^## <small>${ESCAPED_VER}[[:space:]]/{found=1; next} found && /^## /{exit} found && /^# /{exit} found{print}" CHANGELOG.md)
+            if [ -z "$NOTES" ]; then
+              NOTES=$(awk "/^## ${ESCAPED_VER}[[:space:]]/{found=1; next} found && /^## /{exit} found && /^# /{exit} found{print}" CHANGELOG.md)
+            fi
           else
             ESCAPED_TAG=$(printf '%s' "$TAG" | sed 's/[[\\.^$*+?(){}|]/\\&/g; s/\//\\\//g')
             NOTES=$(awk "/^## ${ESCAPED_TAG}[[:space:]]/{found=1; next} found && /^## [^#]/{exit} found{print}" CHANGELOG.md)
