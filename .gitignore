@@ -1,10 +1,15 @@
 # Dependencies
 node_modules
+**/node_modules/
 .pnpm-store
+.modules.yaml
+.pnpm-workspace-state*
 
 # Build output
 dist
 .output
+.nuxt
+.nitro
 *.tsbuildinfo
 
 # Turbo
@@ -58,3 +63,7 @@ local_cache
 .worktrees/
 !patches/
 !patches/*.patch
+
+# Generated type helpers
+auto-imports.d.ts
+components.d.ts
