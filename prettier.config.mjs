@@ -36,7 +36,7 @@ const config = {
 	jsxSingleQuote: true,
 	useTabs: true,
 	tabWidth: 2,
-	endOfLine: "auto",
+	endOfLine: "lf",
 	trailingComma: "all",
 	bracketSpacing: true,
 	arrowParens: "always",
