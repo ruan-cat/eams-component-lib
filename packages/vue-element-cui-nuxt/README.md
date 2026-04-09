@@ -34,3 +34,5 @@ pnpm --filter @eams-monorepo/vue-element-cui-nuxt test:watch
 
 - 开发环境：`http://localhost:3000`
 - 文档首页：`http://localhost:3000/docs/getting-started`
+
+<!-- TODO: 故意触发发版 -->
