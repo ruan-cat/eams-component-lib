@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parsePnpmWorkspaceYaml } from "pnpm-workspace-yaml";
 import { defineConfig } from "relizy";
-
 import changelogConfig from "./changelog.config";
 
 function readWorkspacePackageGlobs(): string[] {

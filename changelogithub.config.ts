@@ -1,6 +1,6 @@
 import { defineConfig } from "changelogithub";
 
-import changelogConfig from "./changelog.config";
+import changelogConfig from "./changelog.config.ts";
 
 type ChangelogithubConfig = Parameters<typeof defineConfig>[0];
 type ChangelogithubTypes = ChangelogithubConfig["types"];

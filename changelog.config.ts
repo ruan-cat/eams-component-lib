@@ -9,7 +9,7 @@ const relizyCompatibleTypes = changelogogenUseTypes as NonNullable<
  * @see https://github.com/unjs/changelogen
  */
 export default {
-	// 提供明确的文件名
+	// 提供明显的文件名
 	output: "CHANGELOG.md",
 
 	/** @see https://github.com/viapip/ozon-tracker/blob/master/changelogen.config.json */

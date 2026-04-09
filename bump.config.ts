@@ -1,12 +1,15 @@
+// bump.config.ts
 import { defineConfig } from "bumpp";
 
 /**
  * @see https://github.com/antfu-collective/bumpp
  */
 export default defineConfig({
+	// 不生成提交信息
 	// commit: false,
 	commit: "📢 publish(root): release v%s",
 	tag: "v%s",
+	// 尝试不生成tag
 	// tag: false,
 	// 不推送到远程仓库，由 release 流程最后统一 git push --follow-tags
 	push: false,

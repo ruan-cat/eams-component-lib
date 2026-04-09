@@ -15,6 +15,7 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
 		"allowJs": true,
 		"lib": ["DOM", "DOM.Iterable", "ESNext"],
 		"types": ["vite/client", "node"],
