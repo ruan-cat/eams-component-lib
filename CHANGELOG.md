@@ -1,3 +1,11 @@
+## [1.0.8](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.7...v1.0.8) (2026-04-09)
+
+- 🦄 refactor(release)!: 调整包级 README 的发版触发标记 ([7e16b6e](https://github.com/ruan-cat/eams-component-lib/commit/7e16b6ef72ccc7b77e080bf6abe99639327d4298))
+
+### BREAKING CHANGES
+
+- 包级 README 中用于人工触发发版的注释标记已从旧的 `<!-- TODO: 故意触发发版 -->` 调整为 `<!-- TODO: 故意触发发版 1 -->`；依赖旧注释文本做脚本匹配或人工约定的流程需要同步更新。
+
 ## [1.0.7](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.6...v1.0.7) (2026-04-09)
 
 ## [1.0.6](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.5...v1.0.6) (2026-04-09)
