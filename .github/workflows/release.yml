@@ -78,8 +78,12 @@ jobs:
           fi
 
           if [ -z "$NOTES" ]; then
-            echo "::warning::未在根 CHANGELOG.md 中找到 tag '$TAG' 对应的 section，跳过 release 创建"
-            exit 0
+            if [[ "$TAG" == v* ]]; then
+              NOTES=$'This root release does not contain a populated section in CHANGELOG.md.\n\nThe current release mainly includes maintenance or workflow changes filtered by conventional-changelog.\nPlease review the compare view and commit history for full context.'
+            else
+              echo "::warning::未在根 CHANGELOG.md 中找到 tag '$TAG' 对应的 section，跳过 release 创建"
+              exit 0
+            fi
           fi
 
           echo "提取到的 release notes:"
