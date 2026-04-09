@@ -58,6 +58,13 @@ pnpm --filter @eams-monorepo/vue-element-cui test
 pnpm --filter @eams-monorepo/vue-element-cui typecheck
 ```
 
+## 发版标记
+
+组件库仓库当前采用双轨发版：
+
+- 子包继续使用 `@eams-monorepo/vue-element-cui@x.y.z` 形式的独立 tag
+- 仓库根使用 `v*` 形式的聚合 tag，用于 GitHub Release 展示
+
 ## License
 
 MIT
