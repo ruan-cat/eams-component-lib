@@ -1,7 +1,5 @@
 # Changelog
 
-**Multiple Packages Updated** - 2026-04-09
-
 ## @eams-monorepo/vue-element-cui@2.0.0 (2026-04-09)
 
 [compare changes](https://github.com/ruan-cat/eams-component-lib/compare/@eams-monorepo/vue-element-cui@1.0.0...@eams-monorepo/vue-element-cui@2.0.0)
@@ -22,5 +20,3 @@
 ### ❤️ Contributors
 
 - Ruan-cat ([@ruan-cat](https://github.com/ruan-cat))
-
-All notable changes to this repository will be documented in this file.
