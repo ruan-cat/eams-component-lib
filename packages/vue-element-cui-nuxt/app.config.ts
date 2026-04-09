@@ -1,5 +1,3 @@
-// TODO 故意触发发版
-
 export default defineAppConfig({
 	shadcnDocs: {
 		site: {
