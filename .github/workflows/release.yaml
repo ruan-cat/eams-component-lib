@@ -1,0 +1,110 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+      - "@*/v*" # 支持 @scope/package@v1.0.0 格式
+      - "@*/*@*" # 支持 relizy 生成的 @scope/package@version 格式，如 @01s-11comm/admin@6.1.2
+
+permissions: write-all
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # 该工作流要求我们必传 pnpm-lock.yaml 否则初始化失败
+      # - name: 设置javascript环境
+      #   uses: sxzz/workflows/setup-js@v1
+      #   with:
+      #     fetch-all: false
+      #     package-manager: pnpm
+      #     auto-install: true
+
+      - name: 检出分支
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 安装pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: |
+            - recursive: true
+            - args: [--global, "npm"]
+
+      - name: 安装node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+          registry-url: "https://registry.npmjs.org"
+
+      - name: corepack手动再安装一次pnpm
+        run: corepack enable && corepack install
+
+      # 目前对于该项目来说，是不需要构建发布东西的
+      # - name: Build
+      #   run: pnpm run build
+
+      # changelogithub 底层使用 changelogen，在 git log tag1...tag2 时无法解析含 @ 的 scoped tag（如 @01s-11comm/admin@6.1.3），
+      # 会产生 fatal: ambiguous argument 错误，因此不兼容 relizy 的 monorepo 子包 tag 格式。
+      # 详见探索报告：apps/admin/src/docs/reports/2026-04-09-monorepo-sub-package-github-release-exploration.md
+      # - name: 用 changelogithub 生成 github release 发行版日志
+      #   run: pnpm dlx changelogithub
+      #   continue-on-error: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 最终方案：使用 gh CLI 直接创建 release，将 tag 名作为普通字符串处理，无 @ 歧义
+      # 支持两种 tag 格式：
+      #   - @scope/pkg@version（子包）→ 从 relizy 的根 CHANGELOG.md 提取对应 section
+      #   - v*（根包）→ 从 conventional-changelog 生成的根 CHANGELOG.md 提取对应 section
+      # 详见探索报告：apps/admin/src/docs/reports/2026-04-09-monorepo-sub-package-github-release-exploration.md
+      - name: 从 CHANGELOG.md 提取内容并创建 GitHub Release
+        if: github.ref_type == 'tag'
+        run: |
+          TAG="${{ github.ref_name }}"
+          echo "触发 tag: $TAG"
+
+          # 检查该 tag 的 release 是否已存在
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "Release '$TAG' 已存在，跳过创建"
+            exit 0
+          fi
+
+          # 根据 tag 格式选择不同的 CHANGELOG 提取策略
+          if [[ "$TAG" == v* ]]; then
+            # 根包 tag (v0.12.0) → conventional-changelog 格式
+            # section header: ## <small>0.12.0 (2026-04-09)</small>
+            VERSION="${TAG#v}"
+            ESCAPED_VER=$(printf '%s' "$VERSION" | sed 's/[[\\.^$*+?(){}|]/\\&/g')
+            NOTES=$(awk "/^## <small>${ESCAPED_VER}[[:space:]]/{found=1; next} found && /^## /{exit} found && /^# /{exit} found{print}" CHANGELOG.md)
+          else
+            # 子包 tag (@scope/pkg@version) → relizy 格式
+            # section header: ## @scope/pkg@version (2026-04-09)
+            ESCAPED_TAG=$(printf '%s' "$TAG" | sed 's/[[\\.^$*+?(){}|]/\\&/g; s/\//\\\//g')
+            NOTES=$(awk "/^## ${ESCAPED_TAG}[[:space:]]/{found=1; next} found && /^## [^#]/{exit} found{print}" CHANGELOG.md)
+          fi
+
+          if [ -z "$NOTES" ]; then
+            echo "::warning::未在根 CHANGELOG.md 中找到 tag '$TAG' 对应的 section，跳过 release 创建"
+            exit 0
+          fi
+
+          echo "提取到的 release notes:"
+          echo "$NOTES"
+
+          gh release create "$TAG" --title "$TAG" --notes "$NOTES"
+          echo "成功为 tag '$TAG' 创建 GitHub Release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 对于 changelogithub 来说，生成的日志文件不美观，且云端没有更好的方式实现 git 文件提交操作，故不使用
+      # - name: 用 changelogithub 生成 CHANGELOG 文件日志
+      #   run: pnpm dlx changelogithub --output "CHANGELOG.md"
+      #   continue-on-error: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
