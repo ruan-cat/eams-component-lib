@@ -9,7 +9,15 @@ const debugShimEntry = require.resolve("./shims/debug.ts");
 
 export default defineNuxtConfig({
 	extends: ["shadcn-docs-nuxt"],
-	compatibilityDate: "2025-05-13",
+
+	// https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
+	compatibilityDate: {
+		// https://v3.nitro.build/deploy/providers/cloudflare
+		cloudflare: "2024-09-19",
+		// https://nitro.build/deploy/providers/vercel#observability
+		vercel: "2024-09-19",
+	},
+
 	devtools: { enabled: true },
 	alias: getVueElementCuiAliases(),
 	experimental: {
