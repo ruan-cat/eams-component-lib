@@ -11,17 +11,17 @@
 ## 本地开发
 
 ```bash
-pnpm --filter @eams-monorepo/vue-element-cui-nuxt dev
-pnpm --filter @eams-monorepo/vue-element-cui-nuxt build
-pnpm --filter @eams-monorepo/vue-element-cui-nuxt generate
-pnpm --filter @eams-monorepo/vue-element-cui-nuxt preview
+pnpm --dir packages/vue-element-cui-nuxt dev
+pnpm --dir packages/vue-element-cui-nuxt build
+pnpm --dir packages/vue-element-cui-nuxt generate
+pnpm --dir packages/vue-element-cui-nuxt preview
 ```
 
 ## 测试
 
 ```bash
-pnpm --filter @eams-monorepo/vue-element-cui-nuxt test
-pnpm --filter @eams-monorepo/vue-element-cui-nuxt test:watch
+pnpm --dir packages/vue-element-cui-nuxt test
+pnpm --dir packages/vue-element-cui-nuxt test:watch
 ```
 
 ## 文档维护

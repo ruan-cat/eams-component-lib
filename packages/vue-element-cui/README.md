@@ -52,10 +52,10 @@ AutoImport({
 ## 本地开发
 
 ```bash
-pnpm --filter @eams-monorepo/vue-element-cui build
-pnpm --filter @eams-monorepo/vue-element-cui dev
-pnpm --filter @eams-monorepo/vue-element-cui test
-pnpm --filter @eams-monorepo/vue-element-cui typecheck
+pnpm --dir packages/vue-element-cui build
+pnpm --dir packages/vue-element-cui dev
+pnpm --dir packages/vue-element-cui test
+pnpm --dir packages/vue-element-cui typecheck
 ```
 
 ## 发版标记

@@ -40,8 +40,9 @@ eams-component-lib/
 pnpm install
 pnpm lint
 pnpm build
-pnpm --filter @eams-monorepo/vue-element-cui test
-pnpm --filter @eams-monorepo/vue-element-cui-nuxt dev
+pnpm test
+pnpm build:docs
+pnpm --dir packages/vue-element-cui-nuxt dev
 ```
 
 ## CI 自检
@@ -50,7 +51,7 @@ pnpm --filter @eams-monorepo/vue-element-cui-nuxt dev
 pnpm run ci
 ```
 
-该命令会顺序执行根级 lint、Turbo 构建、组件库测试，以及文档站生产构建。GitHub Actions `ci.yml` 复用同一条命令链；当仓库配置了 `TURBO_TOKEN` 与 `TURBO_TEAM` 时，会自动接入 Turbo 远程缓存。
+该命令会顺序执行根级 lint、Turbo 测试，以及 Turbo 文档构建。`test` 与 `build:docs` 都依赖 Turbo 的任务匹配和工作区依赖图：组件库与文档站不再通过 `--filter` 手工串联，而是由 `@eams-monorepo/vue-element-cui-nuxt -> @eams-monorepo/vue-element-cui` 的工作区依赖自动编排。GitHub Actions `ci.yml` 继续复用同一条命令链；当仓库配置了 `TURBO_TOKEN` 与 `TURBO_TEAM` 时，会自动接入 Turbo 远程缓存。
 
 ## 发版与 GitHub Release
 
