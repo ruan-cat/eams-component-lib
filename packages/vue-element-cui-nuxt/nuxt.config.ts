@@ -151,12 +151,9 @@ export default defineNuxtConfig({
 			...(isWindows ? { trace: false } : {}),
 		},
 		prerender: {
-			crawlLinks: false,
-		},
-		hooks: {
-			"prerender:routes"(routes: Set<string>) {
-				routes.clear();
-			},
+			// 文档站使用 document-driven 模式，必须开启预渲染才能在构建时解析 content markdown
+			// 为预解析对象并存入缓存；禁用预渲染会导致运行时 content 数据库为空。
+			crawlLinks: true,
 		},
 	},
 });
