@@ -1,6 +1,7 @@
 {
 	"name": "@eams-monorepo/vue-element-cui-nuxt",
 	"description": "EAMS Vue Element CUI Nuxt Documentation Site",
+	"homepage": "https://vec.ruan-cat.com",
 	"version": "3.0.0",
 	"type": "module",
 	"scripts": {
