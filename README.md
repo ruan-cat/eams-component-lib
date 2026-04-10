@@ -2,12 +2,17 @@
 
 一个面向开源展示与求职叙事的现代组件库 monorepo。
 
+## 线上文档站
+
+- 主域名： https://vec.ruan-cat.com
+- 备用域名： https://vue-element-cui.ruan-cat.com
+
 ## 仓库定位
 
 这个仓库不再承载具体业务应用，而是聚焦在三件事：
 
 - `packages/vue-element-cui`：现代 Vue 3 组件库本体
-- `packages/vue-element-cui-nuxt`：组件库展示站与文档站
+- `packages/vue-element-cui-nuxt`：组件库展示站与文档站（部署至上述域名）
 - `old/vue-element-cui`：Vue 2 时代旧组件库的历史实现，用于迁移对照
 
 ## 工程化能力
