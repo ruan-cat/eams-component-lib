@@ -94,13 +94,6 @@ export default defineNuxtConfig({
 	},
 
 	nitro: {
-		externals: {
-			/**
-			 * 将全部依赖内联进 server bundle，使云函数无需 node_modules 即可运行。
-			 * 这同时规避了 Windows + pnpm workspace 下 @vercel/nft trace 长期卡死的问题。
-			 */
-			inline: [/.*/],
-		},
 		prerender: {
 			crawlLinks: false,
 		},
