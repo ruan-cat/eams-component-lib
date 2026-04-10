@@ -56,7 +56,41 @@ export default defineNuxtConfig({
 			dedupe: ["dayjs"],
 		},
 		ssr: {
-			noExternal: ["debug"],
+			/**
+			 * 阻止 Vite SSR 构建将以下包外部化，强制在构建时解析并打入 server bundle。
+			 *
+			 * 背景：pnpm monorepo 的符号链接结构会导致 Vercel 的 @vercel/nft 依赖追踪
+			 * 无法正确跟踪传递依赖（尤其是存在多版本的包，如 @vueuse/core 有 v12/v13/v14 三个版本）。
+			 *
+			 * 导入链：Nuxt SSR → @eams-monorepo/vue-element-cui（workspace 包）→ element-plus → @vueuse/core
+			 * 如果不在此处阻止外部化，Vite 会将 workspace 包和 element-plus 标记为 external，
+			 * 运行时从 node_modules 加载 ESM 文件，而 @vueuse/core 因 NFT 追踪失败不在 node_modules 中，
+			 * 导致 ERR_MODULE_NOT_FOUND 崩溃。
+			 *
+			 * nitro.externals.inline 无法解决此问题——它作用于 Nitro Rollup 阶段，
+			 * 但 Vite SSR 已经在更早的阶段将这些包外部化了。
+			 */
+			noExternal: [
+				"debug",
+				// workspace 组件库包：必须打入 bundle，否则运行时通过 workspace 符号链接加载会丢失上下文
+				"@eams-monorepo/vue-element-cui",
+				// element-plus 及其完整运行时依赖树
+				/element-plus/,
+				/@element-plus/,
+				/@vueuse/,
+				/vue-demi/,
+				/@ctrl\/tinycolor/,
+				/@floating-ui/,
+				/@popperjs\/core/,
+				/async-validator/,
+				/escape-html/,
+				/lodash-unified/,
+				/lodash-es/,
+				/memoize-one/,
+				/normalize-wheel-es/,
+				// @vue/compiler-core 依赖，曾因多版本（v4/v6/v7）导致 entities/decode 崩溃
+				/entities/,
+			],
 		},
 	},
 
