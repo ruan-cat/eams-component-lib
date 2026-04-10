@@ -19,6 +19,11 @@
 		"build:docs": {
 			"dependsOn": ["^build"],
 			"outputs": [".output/**"]
+		},
+		"do-build-nuxt-doc": {
+			"cache": true,
+			"outputs": [".vercel/output/**"],
+			"dependsOn": ["@eams-monorepo/vue-element-cui-nuxt#move-vercel-output-to-root"]
 		}
 	}
 }

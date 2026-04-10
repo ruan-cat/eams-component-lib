@@ -36,7 +36,8 @@
 		"changelog": "relizy-runner changelog",
 		"changelog:dry": "relizy-runner changelog --dry-run",
 		"changelog:conventional-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-		"git:push": "git push --follow-tags"
+		"git:push": "git push --follow-tags",
+		"build:docs:nuxt-doc": "turbo run do-build-nuxt-doc"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.30.0",

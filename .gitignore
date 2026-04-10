@@ -67,3 +67,5 @@ local_cache
 # Generated type helpers
 auto-imports.d.ts
 components.d.ts
+
+.vercel
