@@ -24,7 +24,7 @@
 - `lint-staged.config.js` 保持当前的精细过滤策略，优先保障性能。
 - `simple-git-hooks.mjs` 必须保持根目录简模式，禁止再使用切入旧嵌套目录的历史写法。
 - `old/vue-element-cui` 必须保留，作为旧组件库迁移到现代架构的证据链。
-- **禁止在 `nuxt.config.ts` 中使用 `nitro.externals.trace = false`**——它会导致 Vercel 云函数产物缺失运行时依赖。需要绕开 Windows + pnpm workspace 的 `@vercel/nft` 卡死时，用 `nitro.externals.inline = [/.*/]` 代替，让 Rollup 将全部依赖内联进 server bundle。对 `nitro.externals` 的任何改动，必须在构建后检查 `__fallback.func/` 目录结构确认产物完整性。
+- **禁止在 `nuxt.config.ts` 中使用 `nitro.externals.trace = false` 或 `nitro.externals.inline = [/.*/]`**——前者让云函数缺失运行时依赖，后者在 Vercel 上会被二次 NFT 追踪覆盖导致 `node_modules` 残缺。正确做法是不配置 `nitro.externals`（让 Vercel Linux 构建使用默认 trace），同时用 `pnpm-workspace.yaml` 的 `overrides` 锁定有多版本歧义的依赖（如 `entities`）。Vercel 部署问题不能只在本地验证，必须通过实际部署 URL 或 Vercel MCP 确认运行时状态。
 
 ## 主动澄清
 
