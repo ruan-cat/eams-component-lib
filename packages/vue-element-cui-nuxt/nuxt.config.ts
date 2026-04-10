@@ -1,5 +1,7 @@
 import { createRequire } from "node:module";
 
+import { isWindows } from "std-env";
+
 import { getVueElementCuiAliases } from "./workspace-aliases";
 
 const require = createRequire(import.meta.url);
@@ -94,6 +96,26 @@ export default defineNuxtConfig({
 	},
 
 	nitro: {
+		externals: {
+			inline: [
+				/element-plus/,
+				/@element-plus/,
+				/@vueuse/,
+				/vue-demi/,
+				/@ctrl\/tinycolor/,
+				/@floating-ui/,
+				/@popperjs\/core/,
+				/async-validator/,
+				/escape-html/,
+				/lodash-unified/,
+				/lodash-es/,
+				/memoize-one/,
+				/normalize-wheel-es/,
+				/entities/,
+			],
+			// Windows + pnpm monorepo 下 @vercel/nft trace 会卡死；仅本地跳过，Vercel CI (Linux) 正常 trace
+			...(isWindows ? { trace: false } : {}),
+		},
 		prerender: {
 			crawlLinks: false,
 		},
