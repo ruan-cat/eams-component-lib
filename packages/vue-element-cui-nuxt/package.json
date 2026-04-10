@@ -21,6 +21,7 @@
 	"dependencies": {
 		"@eams-monorepo/vue-element-cui": "workspace:*",
 		"element-plus": "^2.13.5",
+		"entities": "^7.0.1",
 		"nuxt": "^3.21.2",
 		"shadcn-docs-nuxt": "^1.1.9",
 		"tailwindcss": "^4.2.1",
