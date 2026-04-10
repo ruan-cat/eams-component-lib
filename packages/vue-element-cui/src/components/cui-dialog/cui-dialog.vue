@@ -6,6 +6,7 @@
 		:show-close="showClose"
 		:close-on-click-modal="closeOnClickModal"
 		:before-close="beforeClose"
+		append-to-body
 		@update:model-value="$emit('update:modelValue', $event)"
 		@open="$emit('open')"
 		@close="$emit('close')"
