@@ -23,7 +23,7 @@
 3. 认真读取 memorix 关于此的记忆。
 4. 在 `D:\code\github-desktop-store\gh.ruancat.monorepo\ai-plugins\dev-skills\skills` 目录内，根据其他 `D:\code\github-desktop-store\gh.ruancat.monorepo\ai-plugins\common-tools\skills` 技能的写法，模仿其 yaml 格式数据，编写一个 `init-pure-admin-iconify` 技能。
 
-## 004 <!-- TODO: --> 将 nuxt docs 部署到 vercel 平台
+## 004 <!-- 已完成 --> 将 nuxt docs 部署到 vercel 平台
 
 这个项目的核心目的就是为了实现面试的展示，所以我需要将组件库文档对外展示出来。需要一个可用的地址出来。
 
