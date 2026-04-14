@@ -1,6 +1,7 @@
 {
 	"name": "@eams-monorepo/root",
 	"description": "Modern component library showcase monorepo",
+	"homepage": "https://vec.ruan-cat.com/",
 	"private": true,
 	"version": "1.0.8",
 	"type": "module",
