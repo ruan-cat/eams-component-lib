@@ -1,3 +1,6 @@
+const repositoryUrl = "https://github.com/ruan-cat/eams-component-lib";
+const repositoryIssuesUrl = `${repositoryUrl}/issues`;
+
 export default defineAppConfig({
 	shadcnDocs: {
 		site: {
@@ -38,7 +41,7 @@ export default defineAppConfig({
 			links: [
 				{
 					icon: "lucide:github",
-					to: "https://github.com/eams/vue-element-cui",
+					to: repositoryUrl,
 					target: "_blank",
 				},
 			],
@@ -59,7 +62,7 @@ export default defineAppConfig({
 			links: [
 				{
 					icon: "lucide:github",
-					to: "https://github.com/eams/vue-element-cui",
+					to: repositoryUrl,
 					target: "_blank",
 				},
 			],
@@ -71,13 +74,13 @@ export default defineAppConfig({
 				{
 					title: "GitHub",
 					icon: "lucide:star",
-					to: "https://github.com/eams/vue-element-cui",
+					to: repositoryUrl,
 					target: "_blank",
 				},
 				{
 					title: "提交 Issue",
 					icon: "lucide:circle-dot",
-					to: "https://github.com/eams/vue-element-cui/issues",
+					to: repositoryIssuesUrl,
 					target: "_blank",
 				},
 			],
