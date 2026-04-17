@@ -20,7 +20,7 @@
 - `pnpm workspace` 统一管理多包
 - `turbo` 组织构建、开发与任务编排
 - `relizy` + `changelogen` 生成根级 `CHANGELOG.md` 与 release commit
-- `changelogithub` 在 GitHub Actions 中生成 GitHub Release
+- `GitHub Actions` + `gh release create` 从根级 `CHANGELOG.md` 提取内容创建 GitHub Release
 - `eslint`、`prettier`、`simple-git-hooks`、`lint-staged` 负责代码质量收敛
 - `vitest` 覆盖组件库与文档站测试
 
@@ -61,22 +61,29 @@ pnpm run ci
 ## 发版与 GitHub Release
 
 ```bash
-pnpm run release:relizy
+pnpm run release
 ```
 
 预演版本计划时使用：
 
 ```bash
-pnpm run release:changelog:dry-run
-pnpm run release:relizy:dry-run
+pnpm run changelog:dry
+pnpm run release:dry
+```
+
+如需单独重建根级 `CHANGELOG.md`，使用：
+
+```bash
+pnpm run changelog:root
 ```
 
 当前仓库的发布边界如下：
 
+- `pnpm run release` 会按顺序执行 `release:sub`、`release:root`、`git:push`。
+- `release:sub`、`release:dry` 与 `release:root` 显式传递 `--yes`，避免 release 路径在无 TTY 环境卡在交互确认。
 - 不执行 npm publish。
 - `old/vue-element-cui` 只作为迁移对照保留，不参与新的 relizy bump 扫描。
-- 只有未来新的根级 `v*` tag 会触发 GitHub Release workflow。
-- 历史 `@eams-monorepo/*@*` tag 会继续保留，但不会生成 GitHub Release 页面。
+- GitHub Actions 会在收到根级 `v*` tag 与 relizy 生成的 `@scope/package@*` tag 后，从根级 `CHANGELOG.md` 提取对应 section 创建 GitHub Release。
 
 ## 迁移叙事
 
