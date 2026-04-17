@@ -1,3 +1,7 @@
+## v2.0.1
+
+[compare changes](https://github.com/ruan-cat/eams-component-lib/compare/v2.0.1-beta.1...v2.0.1)
+
 ## v2.0.1-beta.1
 
 [compare changes](https://github.com/ruan-cat/eams-component-lib/compare/v2.0.0...v2.0.1-beta.1)
