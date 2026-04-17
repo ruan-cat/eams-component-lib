@@ -1,3 +1,27 @@
+## v2.0.1-beta.1
+
+[compare changes](https://github.com/ruan-cat/eams-component-lib/compare/v2.0.0...v2.0.1-beta.1)
+
+### 📖 Documentation
+
+- **release:** 同步新版发版约定说明 ([20aec5c](https://github.com/ruan-cat/eams-component-lib/commit/20aec5c))
+
+### 🤖 CI
+
+- **release:** 校正根级 changelog 来源注释 ([110692e](https://github.com/ruan-cat/eams-component-lib/commit/110692e))
+
+### 🔧 更新配置
+
+- **release:** ⚠️ 收敛根包发版推送语义 ([32eed80](https://github.com/ruan-cat/eams-component-lib/commit/32eed80))
+
+#### ⚠️ Breaking Changes
+
+- **release:** ⚠️ 收敛根包发版推送语义 ([32eed80](https://github.com/ruan-cat/eams-component-lib/commit/32eed80))
+
+### ❤️ Contributors
+
+- Ruan-cat <1219043956@qq.com>
+
 ## v2.0.0
 
 [compare changes](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.8...v2.0.0)
