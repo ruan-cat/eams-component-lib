@@ -1,3 +1,72 @@
+## v2.0.0
+
+[compare changes](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.8...v2.0.0)
+
+### ✨ 新增功能
+
+- **vercel:** 接入 Nuxt 文档站 monorepo Vercel 构建链路与产物回迁 ([1ccfbaa](https://github.com/ruan-cat/eams-component-lib/commit/1ccfbaa))
+
+### 🐞 修复缺陷
+
+- **nuxt-doc:** 为 Vercel 与 Cloudflare 拆分 Nitro compatibilityDate ([52ba0cf](https://github.com/ruan-cat/eams-component-lib/commit/52ba0cf))
+- **nuxt-doc:** 用 inline 替换 trace:false 修复 Vercel 云函数依赖缺失 ([213d8d5](https://github.com/ruan-cat/eams-component-lib/commit/213d8d5))
+- **nuxt-doc:** 移除 nitro externals.inline 修复 Vercel 运行时模块缺失 ([aab4edb](https://github.com/ruan-cat/eams-component-lib/commit/aab4edb))
+- **nuxt-doc:** 显式声明 entities 依赖修复 Vercel 云函数模块缺失 ([211c662](https://github.com/ruan-cat/eams-component-lib/commit/211c662))
+- **nuxt-doc:** 按平台区分 Nitro externals 并定点内联依赖 ([6d6061a](https://github.com/ruan-cat/eams-component-lib/commit/6d6061a))
+- **nuxt-doc:** 通过 vite ssr.noExternal 修复 Vercel 云函数 @vueuse/core 模块缺失 ([159fabd](https://github.com/ruan-cat/eams-component-lib/commit/159fabd))
+- **nuxt-doc:** 恢复预渲染修复生产环境 content 数据库为空 ([8d91882](https://github.com/ruan-cat/eams-component-lib/commit/8d91882))
+- **cui-dialog:** 为 el-dialog 显式设置 append-to-body，修复遮罩层失效 ([c86237c](https://github.com/ruan-cat/eams-component-lib/commit/c86237c))
+- **vue-element-cui-nuxt:** 修正文档站 GitHub 仓库跳转地址 ([d33eac7](https://github.com/ruan-cat/eams-component-lib/commit/d33eac7))
+
+### 📖 Documentation
+
+- **readme:** 收敛 monorepo 开发命令示例 ([1d8a5f5](https://github.com/ruan-cat/eams-component-lib/commit/1d8a5f5))
+- **prompts:** 补充 Nuxt 文档站部署到 Vercel 的提示词条目 ([c2fe7ae](https://github.com/ruan-cat/eams-component-lib/commit/c2fe7ae))
+- **memory:** 记录 Vercel 云函数依赖缺失事故经验 ([07d935c](https://github.com/ruan-cat/eams-component-lib/commit/07d935c))
+- **vercel:** 补充 Nitro/Vercel entities 事故复盘与 CLAUDE 约束 ([c2c922d](https://github.com/ruan-cat/eams-component-lib/commit/c2c922d))
+- **skills:** 补充 pnpm monorepo 幽灵依赖排错案例 ([1b7778f](https://github.com/ruan-cat/eams-component-lib/commit/1b7778f))
+- **skills:** 补充 Vercel SSR 中 @vueuse/core 缺失事故复盘 ([c6b7eed](https://github.com/ruan-cat/eams-component-lib/commit/c6b7eed))
+- **skills:** 补充 Nuxt Content 文档站 Vercel 生产环境连锁故障总复盘 ([77fd027](https://github.com/ruan-cat/eams-component-lib/commit/77fd027))
+- 在 README 中补充线上文档站地址 ([9a60c6d](https://github.com/ruan-cat/eams-component-lib/commit/9a60c6d))
+- 在 record-bug-fix-memory SKILL 中记录 CuiDialog 遮罩失效排错经验 ([4101c2c](https://github.com/ruan-cat/eams-component-lib/commit/4101c2c))
+- **resume:** 新增 Dialog 遮罩层故障排查简历叙事素材 ([1087339](https://github.com/ruan-cat/eams-component-lib/commit/1087339))
+- **resume:** 调整面试故事命名并清理过期报表备份 ([f19dc5d](https://github.com/ruan-cat/eams-component-lib/commit/f19dc5d))
+- 新增 tsdown 构建事故面试叙事稿 ([f6e0d73](https://github.com/ruan-cat/eams-component-lib/commit/f6e0d73))
+- **prompts:** 将 004 TODO 标记为已完成 ([fa4589f](https://github.com/ruan-cat/eams-component-lib/commit/fa4589f))
+- **release:** 同步新版发版命令说明 ([f60a06e](https://github.com/ruan-cat/eams-component-lib/commit/f60a06e))
+
+### 🔨 构建相关
+
+- **monorepo:** ⚠️ 用 Turbo 统一 CI 与文档构建调度 ([5e710e0](https://github.com/ruan-cat/eams-component-lib/commit/5e710e0))
+
+### 🏡 Chore
+
+- **vue-element-cui-nuxt:** 为 package.json 添加 homepage 字段 ([e7d3c22](https://github.com/ruan-cat/eams-component-lib/commit/e7d3c22))
+
+### ✅ Tests
+
+- **vue-element-cui-nuxt:** 补充仓库链接配置回归测试 ([fab6af1](https://github.com/ruan-cat/eams-component-lib/commit/fab6af1))
+
+### 🤖 CI
+
+- **release:** 对齐根级 changelog 标题解析 ([e0c37d8](https://github.com/ruan-cat/eams-component-lib/commit/e0c37d8))
+
+### 🔧 更新配置
+
+- **memorix:** 统一多客户端 Memorix 钩子与 AI 指引配置 ([e39d7db](https://github.com/ruan-cat/eams-component-lib/commit/e39d7db))
+- **gitignore:** 忽略 Cursor MCP 本地配置文件 ([46c86f9](https://github.com/ruan-cat/eams-component-lib/commit/46c86f9))
+- 在根 package.json 中新增 homepage 字段 ([2a39616](https://github.com/ruan-cat/eams-component-lib/commit/2a39616))
+- **release:** ⚠️ 移除旧根级发版链路 ([5d59c67](https://github.com/ruan-cat/eams-component-lib/commit/5d59c67))
+
+#### ⚠️ Breaking Changes
+
+- **monorepo:** ⚠️ 用 Turbo 统一 CI 与文档构建调度 ([5e710e0](https://github.com/ruan-cat/eams-component-lib/commit/5e710e0))
+- **release:** ⚠️ 移除旧根级发版链路 ([5d59c67](https://github.com/ruan-cat/eams-component-lib/commit/5d59c67))
+
+### ❤️ Contributors
+
+- Ruan-cat <1219043956@qq.com>
+
 ## [1.0.8](https://github.com/ruan-cat/eams-component-lib/compare/v1.0.7...v1.0.8) (2026-04-09)
 
 - 🦄 refactor(release)!: 调整包级 README 的发版触发标记 ([7e16b6e](https://github.com/ruan-cat/eams-component-lib/commit/7e16b6ef72ccc7b77e080bf6abe99639327d4298))
