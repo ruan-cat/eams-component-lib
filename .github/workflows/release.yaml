@@ -61,7 +61,7 @@ jobs:
       # 最终方案：使用 gh CLI 直接创建 release，将 tag 名作为普通字符串处理，无 @ 歧义
       # 支持两种 tag 格式：
       #   - @scope/pkg@version（子包）→ 从 relizy 的根 CHANGELOG.md 提取对应 section
-      #   - v*（根包）→ 从 conventional-changelog 生成的根 CHANGELOG.md 提取对应 section
+      #   - v*（根包）→ 从 changelogen 生成的根 CHANGELOG.md 提取对应 section
       - name: 从 CHANGELOG.md 提取内容并创建 GitHub Release
         if: github.ref_type == 'tag'
         run: |
