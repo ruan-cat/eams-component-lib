@@ -19,7 +19,7 @@
 
 - `pnpm workspace` 统一管理多包
 - `turbo` 组织构建、开发与任务编排
-- `relizy` + `changelogen` 生成根级 `CHANGELOG.md` 与 release commit
+- `relizy` 管理子包独立版本线，`bumpp` + `changelogen` 负责根包版本、根级 `CHANGELOG.md` 与 root release commit
 - `GitHub Actions` + `gh release create` 从根级 `CHANGELOG.md` 提取内容创建 GitHub Release
 - `eslint`、`prettier`、`simple-git-hooks`、`lint-staged` 负责代码质量收敛
 - `vitest` 覆盖组件库与文档站测试
@@ -77,10 +77,18 @@ pnpm run release:dry
 pnpm run changelog:root
 ```
 
+如需单独发根包版本并立即推送根 tag，使用：
+
+```bash
+pnpm run release:bumpp
+```
+
 当前仓库的发布边界如下：
 
 - `pnpm run release` 会按顺序执行 `release:sub`、`release:root`、`git:push`。
-- `release:sub`、`release:dry` 与 `release:root` 显式传递 `--yes`，避免 release 路径在无 TTY 环境卡在交互确认。
+- `release:root` 显式使用 `bumpp --no-push --yes --release patch`，只服务串行主链路，不提前推送根 tag。
+- `release:bumpp` 显式使用 `bumpp --push`，只服务单独根包发版，并立即推送根 tag。
+- `release:sub`、`release:dry` 与 `release:root` 显式传递 `--yes`，避免 release/bump 路径在无 TTY 环境卡在交互确认；`changelog:dry` 保持 `relizy-runner` 当前可运行的 `--dry-run` 形式。
 - 不执行 npm publish。
 - `old/vue-element-cui` 只作为迁移对照保留，不参与新的 relizy bump 扫描。
 - GitHub Actions 会在收到根级 `v*` tag 与 relizy 生成的 `@scope/package@*` tag 后，从根级 `CHANGELOG.md` 提取对应 section 创建 GitHub Release。
