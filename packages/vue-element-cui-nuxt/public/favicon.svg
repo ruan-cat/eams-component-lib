@@ -1,0 +1,20 @@
+<svg
+	width="64"
+	height="64"
+	viewBox="0 0 64 64"
+	fill="none"
+	role="img"
+	aria-label="Vue Element CUI component grid badge"
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<rect x="4" y="4" width="56" height="56" rx="15" fill="#0F172A" />
+	<path d="M25 20H39M25 44H39M20 25V39M44 25V39" stroke="#38BDF8" stroke-width="4" stroke-linecap="round" />
+	<rect class="module" x="14" y="14" width="17" height="17" rx="5" fill="#E0F2FE" />
+	<rect class="module" x="33" y="14" width="17" height="17" rx="5" fill="#BAE6FD" />
+	<rect class="module" x="14" y="33" width="17" height="17" rx="5" fill="#7DD3FC" />
+	<rect class="module" x="33" y="33" width="17" height="17" rx="5" fill="#38BDF8" />
+	<circle cx="41.5" cy="22.5" r="4.5" fill="#42B883" />
+	<path d="M19 20.5H26M19 25.5H24" stroke="#0F172A" stroke-width="2" stroke-linecap="round" />
+	<path d="M19 39.5H26M19 44.5H24" stroke="#0F172A" stroke-width="2" stroke-linecap="round" opacity="0.72" />
+	<path d="M38 39.5H45M38 44.5H43" stroke="#0F172A" stroke-width="2" stroke-linecap="round" opacity="0.78" />
+</svg>
