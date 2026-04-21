@@ -1,3 +1,20 @@
+## v2.0.1-beta.2
+
+[compare changes](https://github.com/ruan-cat/eams-component-lib/compare/v2.0.1...v2.0.1-beta.2)
+
+### 🐞 修复缺陷
+
+- 补齐文档站 favicon ([c1187eb](https://github.com/ruan-cat/eams-component-lib/commit/c1187eb))
+
+### 📖 Documentation
+
+- 记录文档站 favicon 设计 ([b2bbe6d](https://github.com/ruan-cat/eams-component-lib/commit/b2bbe6d))
+- 记录文档站 favicon 实现计划 ([58ba0b1](https://github.com/ruan-cat/eams-component-lib/commit/58ba0b1))
+
+### ❤️ Contributors
+
+- Ruan-cat <1219043956@qq.com>
+
 ## v2.0.1
 
 [compare changes](https://github.com/ruan-cat/eams-component-lib/compare/v2.0.1-beta.1...v2.0.1)
