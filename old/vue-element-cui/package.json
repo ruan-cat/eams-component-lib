@@ -44,5 +44,10 @@
 		"> 1%",
 		"last 2 versions",
 		"not dead"
-	]
+	],
+	"author": {
+		"name": "ruan-cat",
+		"email": "1219043956@qq.com",
+		"url": "https://github.com/ruan-cat"
+	}
 }
