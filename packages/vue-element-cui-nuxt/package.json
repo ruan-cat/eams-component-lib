@@ -41,5 +41,10 @@
 		"typescript": "^5.9.3",
 		"vite": "^8.0.0",
 		"vitest": "^4.1.0"
+	},
+	"author": {
+		"name": "ruan-cat",
+		"email": "1219043956@qq.com",
+		"url": "https://github.com/ruan-cat"
 	}
 }
