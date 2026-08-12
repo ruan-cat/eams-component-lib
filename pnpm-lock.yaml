@@ -76,7 +76,7 @@ importers:
         specifier: ^3.8.1
         version: 3.8.1
       prettier-plugin-lint-md:
-        specifier: ^1.0.1
+        specifier: 1.0.1
         version: 1.0.1(prettier@3.8.1)
       relizy:
         specifier: 1.2.2-beta.0

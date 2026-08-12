@@ -51,6 +51,6 @@ export default {
 		}
 
 		/** 返回给 lint-staged 的命令数组。 */
-		return [`prettier --experimental-cli --write ${targetFiles.join(" ")}`];
+		return [`prettier --experimental-cli --write --no-parallel ${targetFiles.join(" ")}`];
 	},
 };

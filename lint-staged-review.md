@@ -1,0 +1,5 @@
+SHA-256: 312b3ef21448c2ce5c15f887e999683e77ef7a18e5aed29aa29750bec2382088
+
+原因码：DYNAMIC_LINT_STAGED_REVIEW_REQUIRED
+
+说明：保留动态模板命令，仅补 --no-parallel。
