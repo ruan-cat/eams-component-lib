@@ -62,3 +62,31 @@
 ### 可参考的例子
 
 你可以查看 vercel 的 `notes-my-pull-requests` 项目的做法，模仿其配置。
+
+## 005 <!-- TODO: --> 整体升级并排查 shadcn-docs-nuxt 的依赖隐患问题
+
+我们的 shadcn-docs-nuxt 在其他项目内事实上出现极其严重的故障，我真的对此很愤怒。
+
+我要求你做好一个艰巨任务的准备，我要根据最新的全局技能 `init-shadcn-docs-nuxt` 的指导，对本项目的 nuxt content ，做全面的依赖升级。
+
+升级后，你按照这样的步骤完成全面的校验：
+
+```txt
+fresh install
+↓
+pnpm why
+↓
+Nuxt prepare
+↓
+Windows build
+↓
+Linux CI build
+↓
+.output startup
+↓
+真实 HTTP smoke
+↓
+Vercel
+```
+
+## 006 <!-- TODO: -->
