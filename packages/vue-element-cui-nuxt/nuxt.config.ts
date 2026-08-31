@@ -73,7 +73,7 @@ export default defineNuxtConfig({
 		},
 		ssr: {
 			// 仅保留已复现 debug ESM/CJS 入口问题所需的窄兼容入口。
-			noExternal: ["debug", "@vueuse/core", "element-plus"],
+			noExternal: ["debug", "@vueuse/core", "element-plus", "@sxzz/popperjs-es"],
 		},
 	},
 
