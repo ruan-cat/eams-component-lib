@@ -12,11 +12,11 @@
 - 证据：父任务 F24 及部署日志，调用链为 `@vue/compiler-core/dist/compiler-core.cjs.prod.js` → `vue` → `entities/decode`。
 - 后续：先取得当前 artifact manifest 与外部 import，再决定修复阶段。
 
-## F3 · active · 外部验收尚未完成
+## F3 · resolved · 外部验收尚未完成
 
 - 结论：当前 commit 尚未进入 GitHub Actions/Git Integration；agent-browser 可见浏览器验收也未完成。
 - 证据：父任务 F11/F16；当前工作区仍有未提交改动。
-- 后续：修复后必须分别执行 Linux CI、Vercel Git、HTTP 和 agent-browser，不把 CLI preview READY 当生产通过。
+- 后续：无；Linux CI、Vercel Git、HTTP 和 agent-browser 均已完成。
 
 ## F4 · active · 本地产物含绝对 file URL
 
@@ -24,11 +24,11 @@
 - 证据：`rg` 检查 `packages/vue-element-cui-nuxt/.vercel/output/functions/**` 命中 `unified`、`vue-router`、`vue` 等绝对路径；主工作区 `.output/server` 当前不存在。
 - 后续：子任务必须在 Linux/Vercel 产物中确认无本机绝对路径，并以函数 manifest/trace 证据修复。
 
-## F5 · active · agent-browser 对照结果
+## F5 · superseded · agent-browser 对照结果
 
 - 结论：可见浏览器能够打开旧生产域名；候选预览受 Vercel 保护并显示非应用页面，不能作为应用通过证据。
 - 证据：`agent-browser --args --no-sandbox` 打开 `https://vec.ruan-cat.com/` 成功，snapshot 显示首页导航/主题按钮；候选 `https://vue-element-cui-nuxt-2lc50vw8u-ruancat-projects.vercel.app/` 未呈现应用，`vercel curl` 同 URL 返回 500。
-- 后续：修复并获得 bypass/Git 主链后，再用 agent-browser 验证 console、hydration、主题、侧栏与 demo 交互。
+- 后续：最终生产 deployment 已通过可见浏览器验证，旧候选失败记录仅保留为历史对照。
 
 ## F6 · resolved · CLI 上传可能携带本地生成产物
 
@@ -36,16 +36,23 @@
 - 证据：Vercel deployment files API 显示 `src/packages/vue-element-cui-nuxt/.output/server/**` 被上传；这些文件来自 Windows 本地构建，含 `file://D:/...` imports。
 - 结论：该假设已排除。排除所有 `.nuxt/.output/.vercel/node_modules` 的 `D:\eams-runtime-clean` 源码 checkout，经 Vercel 远端重新安装/构建后仍复现同一 500。
 
-## F7 · active · Vercel runtime closure 架构阻塞
+## F7 · superseded · Vercel runtime closure 架构阻塞
 
 - 结论：截至当前最小实验，没有可证明的 `nuxt.config.ts` noExternal/inline 修复。clean checkout 依次验证了 `entities` 直接依赖、`entities`/Vue compiler inline、正则 `/entities/`、以及 workspace package SSR noExternal，所有部署均 READY 但 HTTP 仍返回 `FUNCTION_INVOCATION_FAILED`。
 - 首错：Vercel function 启动时 `@vue/compiler-core/dist/compiler-core.cjs.prod.js` → `vue/dist/vue.cjs.prod.js` → `entities/decode`。
 - 判定：不是“构建失败”，而是 Linux/Vercel 函数产物在运行时缺少 `entities/decode` 可解析闭包；当前公开配置层尝试不足以证明闭包已修复。
 - 边界：任务 7-13 不得勾选。需要新的产物级方案（Vercel/Nitro adapter、函数 manifest/trace 修补或锁定兼容依赖）后，才能继续全链路验收。
 
+## F11 · resolved · Vercel Function runtime closure 已闭合
+
+- 结论：通过依赖图统一与精确 SSR bundle/alias 处理，最终生产 Function 已可启动并响应页面与 Content API。
+- 修复链：全局 `entities@7.0.1`；`@vueuse/core@12.0.0` 与 `@popperjs/core` alias 直接声明；`element-plus`、`@vueuse/core`、`@sxzz/popperjs-es`、`reka-ui`、`defu` SSR inline；`@popperjs/core` 映射到绝对 ESM 入口。
+- 证据：Git Integration deployment `dpl_E3ShR447tNh6SqjBbLQXfWeWQwhz` READY；首页、安装页、Table demo、规范/更新页、cache/search API 均 HTTP 200；`vercel logs` 未出现缺包；agent-browser 生产首页/Table demo 通过，errors 为空。
+- 防回归：`build:vercel` 保留 `^build` workspace 依赖；CI run `33402551030` 成功；OpenSpec 任务 7-14 已完成。
+
 ## F8 · resolved · compatibilityDate 对象改写未改变首错
 
-- 结论：按用户要求将 Nuxt 配置改为 Cloudflare/Vercel 双平台对象，保留日期 `2025-05-13`；Nuxt 3.21.2 prepare 和 Vercel preset build 均成功，但远端 HTTP 仍 500。
+- 结论：按用户要求将 Nuxt 配置改为 Cloudflare/Vercel 双平台对象，日期严格采用 `2024-09-19`；Nuxt 3.21.2 prepare 和 Vercel preset build 均成功，日期本身不是远端首错。
 - 证据：隔离 fresh install、`nuxt prepare`、9 个测试文件/12 个测试通过；本地与 Vercel 构建日志均显示 `compatibility date: 2024-09-19`；Vercel `dpl_B2tGRVyezXBASWV6LDDhxFVrAUdJ` READY 后 `vercel curl /` 仍返回 `FUNCTION_INVOCATION_FAILED`。
 - 判定：日期/对象形状不是 `entities/decode` runtime closure 修复；任务 7 继续保持未完成。该规范化配置已保留在主工作区。
 
@@ -56,8 +63,8 @@
 - 修复：提交 `951272d` 增加该 Turbo 依赖边，避免 Git Integration 依赖旧缓存或本地上传产物。
 - 边界：构建图修复已推送并通过生产构建验证；后续 Function HTTP 仍需单独验收。
 
-## F10 · active · workspace build 修复后仍存在 entities 闭包缺口
+## F10 · resolved · workspace build 修复后仍存在 entities 闭包缺口
 
 - 结论：补充 `build:vercel` 的 `^build` 依赖后，Git Integration 已从构建阶段错误推进到 READY；真实 Function 请求仍报 `Cannot find module 'entities/decode'`。
 - 证据：生产 deployment `dpl_CNE8FmdADgz9u7X8b9NSnrJDDSDL` checkout `1a46cc9`，Vercel 日志显示组件库 build、Nuxt build、`.vercel/output` 搬运均成功；随后 `HEAD /` 与 `HEAD /api/_content/cache.json` 均触发同一 `@vue/compiler-core` → `vue` → `entities/decode` 缺包。
-- 判定：Git Integration build graph 已修复，但 F24 runtime closure 仍是独立阻塞；任务 8、11-13 继续未完成。
+- 判定：该中间状态已由 F11 最终闭包修复解决。

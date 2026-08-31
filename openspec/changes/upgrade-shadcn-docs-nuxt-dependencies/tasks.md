@@ -20,12 +20,12 @@
 - [x] [新增] `openspec/changes/upgrade-shadcn-docs-nuxt-dependencies/agent-findings.md` - 记录跨世代依赖、宽配置风险、失败路径与外部部署边界，去重并标注 active/resolved。
 - [x] [验证] `pnpm --filter @eams-monorepo/vue-element-cui-nuxt exec nuxt prepare` - 隔离 checkout 确认 `.nuxt` 生成且无 Content/H3 导出错误。
 - [x] [验证] `pnpm --filter @eams-monorepo/vue-element-cui-nuxt build` - Windows 默认 trace 长尾已记录；显式 `SHADCN_DOCS_SKIP_NFT_TRACE=1` 下 Vercel preset build 成功，且 node-server `.output` build 成功。
-- [ ] [验证] `.github/workflows/ci.yml` - 在 Linux CI 使用 frozen install、prepare、build 与测试，确认不启用 Windows trace workaround（本机无 Linux/WSL/Docker，等待外部 run 证据）。
+- [x] [验证] `.github/workflows/ci.yml` - GitHub Actions run `33402551030`（https://github.com/ruan-cat/eams-component-lib/actions/runs/33402551030）在 Linux 使用 frozen install、prepare、build 与测试全部成功；未启用 Windows trace workaround。
 - [x] [验证] `packages/vue-element-cui-nuxt/.output/server/index.mjs` - 隔离 checkout 启动 node-server 生产产物，记录 PID、监听端口、启动日志与退出状态。
 - [x] [验证] `packages/vue-element-cui-nuxt/tests` 与真实 HTTP 请求 - 请求首页、组件 demo 页、规范/更新页及 Content cache/search API，均返回 200/非空响应，页面无裸 MDC marker。
-- [ ] [验证] Vercel 项目部署 - 当前环境无 Vercel connector/凭据；仅完成 Vercel preset prebuilt artifact build，真实部署门保持未验证。
+- [x] [验证] Vercel 项目部署 - Git push 触发生产 deployment `dpl_E3ShR447tNh6SqjBbLQXfWeWQwhz`，Vercel Git Integration build、functions artifact 与生产 alias 均 READY；HTTP smoke 与浏览器验收由子 change 完成。
 - [x] [验证] `openspec validate upgrade-shadcn-docs-nuxt-dependencies --strict` 与 `git diff --check` - 已复核工件、代码、内容语法、锁文件和状态文件，确认未触碰 `docs/prompts/index.md`。
 
 ## Follow-up 子任务
 
-- [ ] [关联] `openspec/changes/fix-vercel-nitro-runtime-closure/` - 作为本 change F24 的专项子任务，接管 Vercel/Nitro `entities/decode` runtime closure、Git CI、Git Integration 和 agent-browser 端到端验收；父 change 的依赖基线与配置减法是其前置约束。
+- [x] [关联] `openspec/changes/fix-vercel-nitro-runtime-closure/` - 作为本 change F24 的专项子任务，已完成 Vercel/Nitro runtime closure、Git CI、Git Integration、HTTP 与 agent-browser 端到端验收；父 change 的依赖基线与配置减法已生效。

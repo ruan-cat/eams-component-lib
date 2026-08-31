@@ -138,14 +138,14 @@
 - 证据：连续部署仍报 `@vue/compiler-core/dist/compiler-core.cjs.prod.js` 缺少 `entities/decode`；本地 server bundle 对 entities 已无外部 import，但远端函数仍缺包。
 - 后续：仅验证 `vue`、`@vue/compiler-core`、`@vue/compiler-dom` 与 `entities` 的窄 noExternal/inline 闭包；若仍失败，停止继续扩大配置并转架构阻塞。
 
-## F24 · active · Vercel production artifact closure 架构阻塞
+## F24 · resolved · Vercel production artifact closure 架构阻塞
 
 - 结论：root/docs 显式 entities、Vite noExternal、Nitro inline 多轮单变量对照均无法修复远端 `entities/decode`；继续堆依赖白名单会违反生产图边界。
 - 证据：多次 Vercel 预览部署（含 `dpl_94Cf1fw...`、`dpl_9ue2n2...`、`dpl_6sDvBe...`、`dpl_5Wdjei1...`、`dpl_C8Kyqv...`）均 READY，但 HTTP 触发 `@vue/compiler-core` → `entities/decode` 500；本地产物与旧生产域名 `https://vec.ruan-cat.com` 可正常运行。
-- 状态：active/blocking；子 change `fix-vercel-nitro-runtime-closure` 已在排除 `.nuxt/.output/.vercel/node_modules` 的 clean checkout 上复现：部署 `dpl_4aapo1ktVAHmvcH6mjfp51e3UGVJ` READY 但 HTTP 仍 500；按技能强制要求改成 Cloudflare/Vercel 双平台 `compatibilityDate` 对象且日期均为 `2024-09-19` 后，部署 `dpl_B2tGRVyezXBASWV6LDDhxFVrAUdJ` 仍 READY 但 HTTP 500。需要后续架构决策（调整 Vercel Root/Output 口径、升级 Nuxt/Content 世代或重建 Nitro artifact 追踪）后才能关闭，当前 change 不再尝试第六种白名单。
+- 状态：resolved；子 change 通过依赖图统一与精确 SSR bundle/alias 处理闭合 runtime，最终生产 deployment `dpl_E3ShR447tNh6SqjBbLQXfWeWQwhz` READY，HTTP 与浏览器 smoke 通过。
 
-## F25 · active · 已拆分专项子任务
+## F25 · resolved · 已拆分专项子任务
 
 - 结论：F24 不再继续堆叠在父 change 内，已建立 `fix-vercel-nitro-runtime-closure` 作为专项子 change。
 - 证据：子 change proposal/design 明确 Parent change、继承边界与专项验收；父 tasks 已新增 Follow-up 关联条目。
-- 后续：子 change 负责 Vercel/Nitro artifact closure 与 Git/浏览器 E2E；父 change 保持当前依赖/配置交付边界。
+- 后续：无；子 change 已完成 Vercel/Nitro artifact closure 与 Git/浏览器 E2E，父 change 保持依赖/配置交付边界。
