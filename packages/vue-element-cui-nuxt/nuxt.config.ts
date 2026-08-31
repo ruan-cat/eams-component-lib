@@ -7,6 +7,7 @@ import { getVueElementCuiAliases } from "./workspace-aliases";
 const require = createRequire(import.meta.url);
 const dayjsEsmEntry = require.resolve("dayjs/esm/index.js");
 const mermaidEsmEntry = require.resolve("mermaid/dist/mermaid.esm.mjs");
+const popperEsmEntry = require.resolve("@popperjs/core");
 const debugShimEntry = require.resolve("./shims/debug.ts");
 const useWorkspaceSourceAliases =
 	process.env.NODE_ENV === "development" && process.env.SHADCN_DOCS_USE_WORKSPACE_SOURCE === "1";
@@ -63,6 +64,10 @@ export default defineNuxtConfig({
 				{
 					find: /^mermaid$/,
 					replacement: mermaidEsmEntry,
+				},
+				{
+					find: /^@popperjs\/core$/,
+					replacement: popperEsmEntry,
 				},
 				{
 					find: /^debug$/,
