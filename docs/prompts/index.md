@@ -169,4 +169,25 @@ nitro: {
 - `upgrade-shadcn-docs-nuxt-dependencies` 已完成：依赖基线、配置收敛、内容语法、CI、`.output` 启动及 Vercel 生产部署均已验证。
 - 关联 OpenSpec 变更已通过严格校验，父任务与专项子任务均保留可复核的 `tasks.md`、`agent-progress.md` 和报告证据。
 
-## 007 <!-- TODO: -->
+---
+
+我授权你在 `D:\code\ruan-cat\monorepo\ai-plugins\dev-skills\skills\init-shadcn-docs-nuxt` 目录内，直接去修改，增强 `init-shadcn-docs-nuxt` 技能，但是请注意，谨慎的做升级修改，避免出现目标技能的能力丢失和失忆降级的情况。
+
+`init-shadcn-docs-nuxt` 技能的 compatibilityDate 应该和 `D:\code\ruan-cat\monorepo\ai-plugins\dev-skills\skills\nitro-api-development` 的保持相同，即
+
+```ts
+compatibilityDate: {
+  cloudflare: "2024-09-19",
+  vercel: "2024-09-19",
+}
+```
+
+---
+
+我准备关闭本次回话了，请你做好必要的 memorix 存储，用 `.claude\skills\fix-bug\record-bug-fix-memory\SKILL.md` 记录必要的经验教训。
+
+## 007 <!-- 已完成 2026-9-1 codex pro20正在做 --> 重新执行一次 init-ai-md
+
+提供 prettier 的 pr 模板，把 `.claude\skills\fix-bug\record-bug-fix-memory` 迁移到正确的位置，该位置过时过期了。
+
+## 008 <!-- TODO: -->
