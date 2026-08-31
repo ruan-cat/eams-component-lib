@@ -15,7 +15,7 @@
 ## End-to-end acceptance
 
 - [ ] [验证] `.github/workflows/ci.yml` - 以当前 commit 执行 frozen install、prepare、测试和 Linux build，保存 run URL/结论。
-- [ ] [验证] Vercel Git Integration - 以当前 commit 触发正式 Git 构建，确认 checkout SHA、install、build、functions artifact 与 READY。
+- [x] [验证] Vercel Git Integration - commit `1a46cc9` 已触发正式生产构建；日志确认 checkout SHA、install、组件库 `^build`、Nuxt functions artifact、搬运到根 `.vercel/output` 与 READY（deployment `dpl_CNE8FmdADgz9u7X8b9NSnrJDDSDL`）。
 - [ ] [验证] Vercel HTTP smoke - 请求首页、组件 demo、Content cache/search API，确认 2xx、非空响应和无 `entities/decode` 日志。
 - [ ] [验证] `agent-browser` - 在可见浏览器中访问首页与至少一个 demo，检查 console、hydration、暗黑模式、侧栏和 demo 交互。
 - [ ] [验证] 生产发布 - 仅在 Git 主链与浏览器 smoke 全部通过且获得明确发布授权后执行；否则保持未完成并记录阻塞。

@@ -54,4 +54,10 @@
 - 结论：首次 Git Integration 生产构建在 Nuxt SSR 开始前失败，原因是干净 checkout 未先生成 workspace 组件库 `dist`，不是 `entities/decode` 运行时错误。
 - 证据：Vercel 部署 `dpl_5RnvtodC7t5EnpHSemNJtAPjWhuJ` checkout commit `5b0c624` 后，在 `@eams-monorepo/vue-element-cui-nuxt#build:vercel` 报 `Failed to resolve entry for package "@eams-monorepo/vue-element-cui"`；隔离 clean checkout 加入 `packages/vue-element-cui-nuxt/turbo.json` 的 `build:vercel.dependsOn: ["^build"]` 后，组件库 build 成功并进入 Nuxt build。
 - 修复：提交 `951272d` 增加该 Turbo 依赖边，避免 Git Integration 依赖旧缓存或本地上传产物。
-- 边界：该修复尚未重新 push；push 后必须重新观察 Git Integration 生产构建及后续 Function HTTP 结果。
+- 边界：构建图修复已推送并通过生产构建验证；后续 Function HTTP 仍需单独验收。
+
+## F10 · active · workspace build 修复后仍存在 entities 闭包缺口
+
+- 结论：补充 `build:vercel` 的 `^build` 依赖后，Git Integration 已从构建阶段错误推进到 READY；真实 Function 请求仍报 `Cannot find module 'entities/decode'`。
+- 证据：生产 deployment `dpl_CNE8FmdADgz9u7X8b9NSnrJDDSDL` checkout `1a46cc9`，Vercel 日志显示组件库 build、Nuxt build、`.vercel/output` 搬运均成功；随后 `HEAD /` 与 `HEAD /api/_content/cache.json` 均触发同一 `@vue/compiler-core` → `vue` → `entities/decode` 缺包。
+- 判定：Git Integration build graph 已修复，但 F24 runtime closure 仍是独立阻塞；任务 8、11-13 继续未完成。
