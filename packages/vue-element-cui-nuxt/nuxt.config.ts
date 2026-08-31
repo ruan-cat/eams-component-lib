@@ -114,6 +114,8 @@ export default defineNuxtConfig({
 
 	nitro: {
 		externals: {
+			// Vercel function runtime must carry the Vue compiler's subpath dependency.
+			inline: ["entities"],
 			// 仅在 Windows 且显式确认 NFT trace 长尾时跳过；Linux/Vercel 默认保留 trace。
 			...(isWindows && process.env.SHADCN_DOCS_SKIP_NFT_TRACE === "1" ? { trace: false } : {}),
 		},
