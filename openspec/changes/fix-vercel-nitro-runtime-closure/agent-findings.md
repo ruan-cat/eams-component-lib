@@ -48,3 +48,10 @@
 - 结论：按用户要求将 Nuxt 配置改为 Cloudflare/Vercel 双平台对象，保留日期 `2025-05-13`；Nuxt 3.21.2 prepare 和 Vercel preset build 均成功，但远端 HTTP 仍 500。
 - 证据：隔离 fresh install、`nuxt prepare`、9 个测试文件/12 个测试通过；本地与 Vercel 构建日志均显示 `compatibility date: 2024-09-19`；Vercel `dpl_B2tGRVyezXBASWV6LDDhxFVrAUdJ` READY 后 `vercel curl /` 仍返回 `FUNCTION_INVOCATION_FAILED`。
 - 判定：日期/对象形状不是 `entities/decode` runtime closure 修复；任务 7 继续保持未完成。该规范化配置已保留在主工作区。
+
+## F9 · resolved · Git Integration 缺少 workspace build 依赖
+
+- 结论：首次 Git Integration 生产构建在 Nuxt SSR 开始前失败，原因是干净 checkout 未先生成 workspace 组件库 `dist`，不是 `entities/decode` 运行时错误。
+- 证据：Vercel 部署 `dpl_5RnvtodC7t5EnpHSemNJtAPjWhuJ` checkout commit `5b0c624` 后，在 `@eams-monorepo/vue-element-cui-nuxt#build:vercel` 报 `Failed to resolve entry for package "@eams-monorepo/vue-element-cui"`；隔离 clean checkout 加入 `packages/vue-element-cui-nuxt/turbo.json` 的 `build:vercel.dependsOn: ["^build"]` 后，组件库 build 成功并进入 Nuxt build。
+- 修复：提交 `951272d` 增加该 Turbo 依赖边，避免 Git Integration 依赖旧缓存或本地上传产物。
+- 边界：该修复尚未重新 push；push 后必须重新观察 Git Integration 生产构建及后续 Function HTTP 结果。
