@@ -2,6 +2,7 @@
 	"extends": ["//"],
 	"tasks": {
 		"build:vercel": {
+			"dependsOn": ["^build"],
 			"cache": true,
 			"outputs": [".vercel/output/**"]
 		},
