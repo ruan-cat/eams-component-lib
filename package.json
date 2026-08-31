@@ -72,7 +72,14 @@
 	},
 	"dependencies": {
 		"@eams-monorepo/vue-element-cui": "workspace:^",
-		"@eams-monorepo/vue-element-cui-nuxt": "workspace:^"
+		"@eams-monorepo/vue-element-cui-nuxt": "workspace:^",
+		"entities": "^7.0.1"
+	},
+	"pnpm": {
+		"overrides": {
+			"nuxt-og-image": "5.1.9",
+			"tsdown@0.3.1>rolldown": "1.0.0-beta.13-commit.024b632"
+		}
 	},
 	"author": {
 		"name": "ruan-cat",
