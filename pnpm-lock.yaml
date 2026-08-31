@@ -161,6 +161,9 @@ importers:
       '@eams-monorepo/vue-element-cui':
         specifier: workspace:*
         version: link:../vue-element-cui
+      '@popperjs/core':
+        specifier: npm:@sxzz/popperjs-es@2.11.8
+        version: '@sxzz/popperjs-es@2.11.8'
       '@vueuse/core':
         specifier: 12.0.0
         version: 12.0.0(typescript@5.9.3)

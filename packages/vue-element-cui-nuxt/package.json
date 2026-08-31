@@ -21,6 +21,7 @@
 	},
 	"dependencies": {
 		"@eams-monorepo/vue-element-cui": "workspace:*",
+		"@popperjs/core": "npm:@sxzz/popperjs-es@2.11.8",
 		"@ztl-uwu/nuxt-content": "2.13.9",
 		"@vueuse/core": "12.0.0",
 		"element-plus": "^2.13.5",
