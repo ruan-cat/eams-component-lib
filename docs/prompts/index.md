@@ -63,7 +63,9 @@
 
 你可以查看 vercel 的 `notes-my-pull-requests` 项目的做法，模仿其配置。
 
-## 005 <!-- TODO: --> 整体升级并排查 shadcn-docs-nuxt 的依赖隐患问题
+## 005 <!-- 已完成 2026-9-1； codex pro20 正在做 --> 整体升级并排查 shadcn-docs-nuxt 的依赖隐患问题
+
+### 任务设计
 
 我们的 shadcn-docs-nuxt 在其他项目内事实上出现极其严重的故障，我真的对此很愤怒。
 
@@ -89,4 +91,82 @@ Linux CI build
 Vercel
 ```
 
-## 006 <!-- TODO: -->
+---
+
+用最新的 `init-shadcn-docs-nuxt` 技能来修改调整 eams-component-lib 组件库项目
+
+阅读这些上下文：
+
+- https://github.com/ruan-cat/SmallAliceWeb/pull/11/
+- 最新的全局技能 `init-shadcn-docs-nuxt` 技能。
+
+1. 配置处理： `D:\code\ruan-cat\eams-component-lib` 项目是组件库项目，用了 nuxt 文档站点，这个项目之前用的是比较脏的方式完成依赖的控制，进而完成 build 故障处理的。按照最新的技能指导，我要求你完成对这个项目的配置改写，确保我们的这款项目能够完整的依据最新的技能指导，实现统一的故障处理和配置。我很不喜欢每一个项目都有自己独特的，散落到各地的配置。
+2. 更新组件库文档的组件使用： 本技能更新了 mdc 的组件使用方式，请你也做出同步的更改。
+3. 在 memorix 内记录状态和决策。如果你完成了修复，请你记得更新本项目的内部 memorix 的历史记录信息。
+
+及时使用本地 memorix MCP 存储本次会话的记忆
+请你及时使用 memorix MCP，将本次会话出现的错误误区，经验教训，重大更改决策等内容，存储到本地记忆内。避免下次再出现类似的错误。主动使用`memorix_session_start`工具，显式项目绑定建立项目上下文，再用项目 scope 检索；如果超时失败，或用 CLI `memorix memory search` 兜底，或者是其他直接的 memorix cli 来完成记忆读取和和存储任务
+
+### <!-- codex pro20 正在做 --> 2026-8-31 沟通，推进 `upgrade-shadcn-docs-nuxt-dependencies` 任务
+
+采用“新建 OpenSpec change + Nuxt 3 保守基线（含 nuxt-og-image@5.1.9 override）+ 全链路验证”的方案。
+
+---
+
+但 HTTP 持续报 Cannot find module 'entities/decode'，已连续多轮验证，记录为 F24 架构阻塞。
+这是什么东西，我们的云 vercel 流水线失败了么？我们没有完成生产环境的构建和本地 agent browser 的实际浏览器使用么？
+你认为应该要新建一个全新的 openspec change 来专项解决这个问题么？还是说你这个 change 任务工件不适合呢？
+
+---
+
+`@vue/compiler-core -> vue -> entities/decode` 这是什么错误链路？我之前没见过啊，难道 nuxt content 又出现全新的错误了？这太折磨人了。
+好吧，我允许你新建一个全新的 fix-vercel-nitro-runtime-closure 的 openspec 任务工件，但是你要说明，`fix-vercel-nitro-runtime-closure` 任务工件本质上是 `upgrade-shadcn-docs-nuxt-dependencies` 任务的子任务。
+`是 Vercel/Nitro/Vite SSR/依赖追踪/函数打包边界上的生产闭包问题。`
+
+### 2026-8-31 处理 `fix-vercel-nitro-runtime-closure` 子任务
+
+`是 Vercel/Nitro/Vite SSR/依赖追踪/函数打包边界上的生产闭包问题。`
+
+这太古怪了，为什么在 `D:\code\ruan-cat\SmallAliceWeb` 这款项目内，没有出现这个 vercel function 的问题呢？
+
+---
+
+是不是 packages\vue-element-cui-nuxt\nuxt.config.ts 的 `compatibilityDate: "2025-05-13",` 问题？是不是构建后的产物，由于格式问题，复制失败了？
+
+---
+
+你在 D:\code\ruan-cat\eams-component-lib\docs\reports\2026-8-31-fix-shadcn-docs-nuxt 目录内编写报告，说明清楚你是怎么完成故障修复，以及你做了哪些 SSR 层面上的努力。你是怎么解决 vercel function 缺失模块的情况的？compatibilityDate 设置成 2024-09-19 有没有帮助？
+
+---
+
+针对 `docs\reports\2026-8-31-fix-shadcn-docs-nuxt\2026-08-31-fix-shadcn-docs-nuxt.md` 报告，你最重要的修复就是这个吧，让 nitro 内联 entities 依赖。你之前不是也处理过很多这样的依赖么？按照全局技能 init-shadcn-docs-nuxt 的指导，不是应该避免这种精细化处理么？还是说你刚才的修改，你从来没有去看 init-shadcn-docs-nuxt 技能的指导么？这是你的失误么？
+
+```ts
+nitro: {
+	externals: {
+		inline: ["entities"],
+	},
+},
+```
+
+"nuxt-og-image": "5.1.9" 和 "tsdown@0.3.1>rolldown": "1.0.0-beta.13-commit.024b632" 这两个依赖，你又是修复什么东西呢？为什么比 `init-shadcn-docs-nuxt` 技能多了一些东西呢？
+
+---
+
+我现在允许你继续用 git-commit 的方式，继续推进，我要看看 vercel 生产环境到底是不是你说的已经成功构建了，给我最新的证据。
+
+---
+
+用本项目提供的 relizy 以及 package.json 通过的命令，对本次破坏性的重大 bug 修复突破，做发版。更新合适的版本号。
+
+你用了什么命令来完成发版啊？我们现成的根包命令要更改么？适合我们本次的任务么？
+
+`fix-vercel-nitro-runtime-closure` 子任务你认为是否完成了？`upgrade-shadcn-docs-nuxt-dependencies` 任务是否也已经完成了？
+
+## 006 `fix-vercel-nitro-runtime-closure` 与 `upgrade-shadcn-docs-nuxt-dependencies` 完成确认
+
+- `fix-vercel-nitro-runtime-closure` 已完成：Vercel/Nitro runtime closure、Linux 构建、生产 HTTP smoke 与可见浏览器验收均通过。
+- `upgrade-shadcn-docs-nuxt-dependencies` 已完成：依赖基线、配置收敛、内容语法、CI、`.output` 启动及 Vercel 生产部署均已验证。
+- 关联 OpenSpec 变更已通过严格校验，父任务与专项子任务均保留可复核的 `tasks.md`、`agent-progress.md` 和报告证据。
+
+## 007 <!-- TODO: -->
