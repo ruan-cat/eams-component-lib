@@ -8,11 +8,16 @@ const require = createRequire(import.meta.url);
 const dayjsEsmEntry = require.resolve("dayjs/esm/index.js");
 const mermaidEsmEntry = require.resolve("mermaid/dist/mermaid.esm.mjs");
 const debugShimEntry = require.resolve("./shims/debug.ts");
+const useWorkspaceSourceAliases =
+	process.env.NODE_ENV === "development" && process.env.SHADCN_DOCS_USE_WORKSPACE_SOURCE === "1";
+const workspaceAliases = useWorkspaceSourceAliases ? getVueElementCuiAliases() : {};
 
 export default defineNuxtConfig({
 	extends: ["shadcn-docs-nuxt"],
 
-	// https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
+	// Keep the shared Nuxt 3 baseline explicit for each deployment provider.
+	// The date is the previously validated baseline; changing its shape must not
+	// silently opt the document site into a newer Nitro preset behavior.
 	compatibilityDate: {
 		// https://v3.nitro.build/deploy/providers/cloudflare
 		cloudflare: "2024-09-19",
@@ -32,7 +37,7 @@ export default defineNuxtConfig({
 			],
 		},
 	},
-	alias: getVueElementCuiAliases(),
+	alias: workspaceAliases,
 	experimental: {
 		appManifest: false,
 	},
@@ -67,41 +72,8 @@ export default defineNuxtConfig({
 			dedupe: ["dayjs"],
 		},
 		ssr: {
-			/**
-			 * 阻止 Vite SSR 构建将以下包外部化，强制在构建时解析并打入 server bundle。
-			 *
-			 * 背景：pnpm monorepo 的符号链接结构会导致 Vercel 的 @vercel/nft 依赖追踪
-			 * 无法正确跟踪传递依赖（尤其是存在多版本的包，如 @vueuse/core 有 v12/v13/v14 三个版本）。
-			 *
-			 * 导入链：Nuxt SSR → @eams-monorepo/vue-element-cui（workspace 包）→ element-plus → @vueuse/core
-			 * 如果不在此处阻止外部化，Vite 会将 workspace 包和 element-plus 标记为 external，
-			 * 运行时从 node_modules 加载 ESM 文件，而 @vueuse/core 因 NFT 追踪失败不在 node_modules 中，
-			 * 导致 ERR_MODULE_NOT_FOUND 崩溃。
-			 *
-			 * nitro.externals.inline 无法解决此问题——它作用于 Nitro Rollup 阶段，
-			 * 但 Vite SSR 已经在更早的阶段将这些包外部化了。
-			 */
-			noExternal: [
-				"debug",
-				// workspace 组件库包：必须打入 bundle，否则运行时通过 workspace 符号链接加载会丢失上下文
-				"@eams-monorepo/vue-element-cui",
-				// element-plus 及其完整运行时依赖树
-				/element-plus/,
-				/@element-plus/,
-				/@vueuse/,
-				/vue-demi/,
-				/@ctrl\/tinycolor/,
-				/@floating-ui/,
-				/@popperjs\/core/,
-				/async-validator/,
-				/escape-html/,
-				/lodash-unified/,
-				/lodash-es/,
-				/memoize-one/,
-				/normalize-wheel-es/,
-				// @vue/compiler-core 依赖，曾因多版本（v4/v6/v7）导致 entities/decode 崩溃
-				/entities/,
-			],
+			// 仅保留已复现 debug ESM/CJS 入口问题所需的窄兼容入口。
+			noExternal: ["debug"],
 		},
 	},
 
@@ -142,24 +114,8 @@ export default defineNuxtConfig({
 
 	nitro: {
 		externals: {
-			inline: [
-				/element-plus/,
-				/@element-plus/,
-				/@vueuse/,
-				/vue-demi/,
-				/@ctrl\/tinycolor/,
-				/@floating-ui/,
-				/@popperjs\/core/,
-				/async-validator/,
-				/escape-html/,
-				/lodash-unified/,
-				/lodash-es/,
-				/memoize-one/,
-				/normalize-wheel-es/,
-				/entities/,
-			],
-			// Windows + pnpm monorepo 下 @vercel/nft trace 会卡死；仅本地跳过，Vercel CI (Linux) 正常 trace
-			...(isWindows ? { trace: false } : {}),
+			// 仅在 Windows 且显式确认 NFT trace 长尾时跳过；Linux/Vercel 默认保留 trace。
+			...(isWindows && process.env.SHADCN_DOCS_SKIP_NFT_TRACE === "1" ? { trace: false } : {}),
 		},
 		prerender: {
 			// 文档站使用 document-driven 模式，必须开启预渲染才能在构建时解析 content markdown
