@@ -1,7 +1,9 @@
-# shadcn-docs-nuxt / Vercel Function 依赖闭包故障修复报告
+# 2026-08-31 shadcn-docs-nuxt / Vercel Function 依赖闭包故障修复报告
 
 日期：2026-08-31
 项目：`D:\code\ruan-cat\eams-component-lib`
+Agent 工具：Codex
+AI 模型：GPT-5
 父任务：`upgrade-shadcn-docs-nuxt-dependencies`
 专项子任务：`fix-vercel-nitro-runtime-closure`
 
@@ -17,7 +19,7 @@
 
 最初的 Vercel Function 日志为：
 
-```text
+```log
 Cannot find module 'entities/decode'
 Require stack:
 - @vue/compiler-core/dist/compiler-core.cjs.prod.js
@@ -30,7 +32,7 @@ Require stack:
 
 同时还发现一个独立的 Git 构建问题：干净 checkout 没有先生成 workspace 组件库 `dist`，导致：
 
-```text
+```log
 Failed to resolve entry for package "@eams-monorepo/vue-element-cui"
 ```
 
@@ -169,7 +171,7 @@ resolve: {
 
 Windows 下显式设置 `SHADCN_DOCS_SKIP_NFT_TRACE=1` 只用于本地快速验证。该模式生成的本地产物曾出现：
 
-```text
+```log
 file://D:/.../node_modules/.pnpm/...
 ```
 
@@ -252,7 +254,7 @@ CI run：
 
 最终生产部署：
 
-```text
+```log
 dpl_Fvbhc91tMkVWHXZuueLABbNyzdPB
 ```
 
@@ -279,7 +281,7 @@ dpl_Fvbhc91tMkVWHXZuueLABbNyzdPB
 
 Table 页面响应约 526 KB，未出现裸 MDC 标记：
 
-```text
+```log
 ::demo-playground = false
 #preview           = false
 #code              = false
