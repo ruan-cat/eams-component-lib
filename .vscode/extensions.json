@@ -14,6 +14,8 @@
 
 		// vue3的 .vue SFCs 的 LSP 语言支持服务
 		"Vue.volar",
+		// TypeScript 语言服务增强（Nightly 版本，支持最新特性）
+		"ms-vscode.vscode-typescript-next",
 
 		// ========== 代码格式化与检查 ==========
 
@@ -21,12 +23,17 @@
 		"esbenp.prettier-vscode",
 		// 使用 eslint 实现代码检查
 		"dbaeumer.vscode-eslint",
+		// 行内展示错误与警告信息，提升错误可见性
+		"usernamehw.errorlens",
+		// 英文单词拼写检查
+		"streetsidesoftware.code-spell-checker",
 		// EditorConfig 文件支持（统一不同编辑器的代码风格）
 		"EditorConfig.EditorConfig",
 
 		// ========== Git 管理 ==========
 
 		// 使用 git-graph 插件 实现git提交分支图的查看
+		"eamodio.gitlens",
 		"mhutchie.git-graph",
 
 		// ========== 测试 ==========
@@ -38,11 +45,22 @@
 
 		// UnoCSS 智能提示
 		"antfu.unocss",
+		// 颜色值（如 hex、rgb）的行内颜色预览
+		"naumovs.color-highlight",
 
 		// ========== 路径与导入增强 ==========
 
 		// 自动导入文件的智能跳转（支持路径别名）
 		"antfu.goto-alias",
+		// 路径字符串的智能补全
+		"christian-kohler.path-intellisense",
+		// HTML/JSX 中标签重命名时自动同步修改配对标签
+		"formulahendry.auto-rename-tag",
+
+		// ========== 环境变量 ==========
+
+		// .env 文件的语法高亮支持
+		"mikestead.dotenv",
 
 		// ========== 图标与图片 ==========
 
@@ -57,8 +75,10 @@
 
 		// TODO 高亮
 		"wayou.vscode-todo-highlight",
-		// TODO 树统计（Marketplace 标识为 Gruntfuggly.todo-tree；请勿再写小写 publisher 重复项）
-		"Gruntfuggly.todo-tree",
+		// TODO 树统计：原 Todo Tree 的活跃维护替代实现
+		"FanaticPythoner.better-todo-tree",
+		// 自定义代码颜色
+		"warmthsea.vscode-custom-code-color",
 
 		// ========== 本仓库 / uni-app ==========
 
@@ -69,5 +89,8 @@
 		// Wot Design Uni 组件库智能提示
 		"wot-ui.wot-ui-intellisense"
 	],
-	"unwantedRecommendations": []
+	"unwantedRecommendations": [
+		// 已知被替代的旧 Todo Tree；这里只表达工作区不再推荐，不代表卸载或禁用
+		"Gruntfuggly.todo-tree"
+	]
 }

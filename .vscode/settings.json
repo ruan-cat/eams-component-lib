@@ -1,4 +1,6 @@
 {
+	"files.eol": "\n",
+
 	// === 编辑器格式化配置 ===
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -65,27 +67,113 @@
 	"terminal.integrated.cwd": "${workspaceFolder}",
 	"terminal.integrated.splitCwd": "workspaceRoot",
 
-	// === 搜索排除 ===
-	"search.exclude": {
+	// === 文件树排除 ===
+	"files.exclude": {
+		"**/node_modules": true,
+		"**/.git": true,
 		"**/dist": true,
+		"**/dist-ssr": true,
+		"**/build": true,
+		"**/.next": true,
+		"**/.nuxt": true,
+		"**/.output": true,
+		"**/.vite": true,
+		"**/.vitepress/dist": true,
+		"**/.vitepress/cache": true,
+		"**/.vuepress/dist": true,
+		"**/.vuepress/cache": true,
+		"**/.turbo": true,
+		"**/.vercel": true,
 		"**/.cache": true,
 		"**/.temp": true,
+		"**/.tmp": true,
+		"**/coverage": true,
+		"**/.nyc_output": true,
+		"**/.vitest-reporter-html": true,
+		"**/.eslintcache": true,
+		"**/.stylelintcache": true,
+		"**/*.tsbuildinfo": true,
+		"**/*.map": true,
+		"**/logs": true,
+		"**/*.log": true
+	},
+
+	// === 搜索排除 ===
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/.git": true,
+		"**/dist": true,
+		"**/dist-ssr": true,
+		"**/build": true,
+		"**/.next": true,
+		"**/.nuxt": true,
+		"**/.output": true,
+		"**/.vite": true,
+		"**/.vitepress/dist": true,
+		"**/.cache": true,
+		"**/.temp": true,
+		"**/.tmp": true,
 		"**/.vercel": true,
 		"**/.turbo": true,
 		"**/cache": true,
+		"**/.vitepress/cache": true,
 		"**/.vitepress/cache/**": true,
-		"**/.nuxt/**": true
+		"**/.vuepress/dist": true,
+		"**/.vuepress/cache": true,
+		"**/coverage": true,
+		"**/.nyc_output": true,
+		"**/.vitest-reporter-html": true,
+		"**/.eslintcache": true,
+		"**/.stylelintcache": true,
+		"**/*.tsbuildinfo": true,
+		"**/*.map": true,
+		"**/logs": true,
+		"**/*.log": true
 	},
 
 	// === 文件监视排除 ===
 	"files.watcherExclude": {
+		"**/.git/**": true,
 		"**/.git/objects/**": true,
 		"**/.git/subtree-cache/**": true,
-		"**/.turbo/**": true,
-		"**/node_modules/*/**": true,
+		"**/node_modules/**": true,
 		"**/dist/**": true,
+		"**/dist-ssr/**": true,
+		"**/build/**": true,
+		"**/.next/**": true,
+		"**/.nuxt/**": true,
+		"**/.output/**": true,
+		"**/.vite/**": true,
+		"**/.vitepress/dist/**": true,
+		"**/.vitepress/cache/**": true,
+		"**/.vuepress/dist/**": true,
+		"**/.vuepress/cache/**": true,
+		"**/.turbo/**": true,
+		"**/.vercel/**": true,
+		"**/.cache/**": true,
+		"**/.temp/**": true,
+		"**/.tmp/**": true,
+		"**/cache/**": true,
+		"**/coverage/**": true,
+		"**/.nyc_output/**": true,
+		"**/.vitest-reporter-html/**": true,
+		"**/.eslintcache": true,
+		"**/.stylelintcache": true,
+		"**/*.tsbuildinfo": true,
+		"**/*.map": true,
+		"**/logs/**": true,
+		"**/*.log": true,
 		"**/.changeset/**": true
 	},
+	"search.indexing.maxFileSize": 1048576,
+	"typescript.tsserver.maxTsServerMemory": 4096,
+	"typescript.disableAutomaticTypeAcquisition": true,
+	"typescript.tsserver.watchOptions": {
+		"watchFile": "useFsEvents",
+		"watchDirectory": "useFsEvents",
+		"fallbackPolling": "dynamicPriority"
+	},
+	"typescript.tsdk": "node_modules/typescript/lib",
 
 	// === Vue 语言服务 ===
 	"vue.server.includeLanguages": ["vue"],
@@ -117,7 +205,7 @@
 	// Enable file nesting
 	"explorer.fileNesting.enabled": true,
 	"explorer.fileNesting.patterns": {
-		"CLAUDE.md": "GEMINI.md,AGENTS.md",
+		"AGENTS.md": "CLAUDE.md,GEMINI.md,DESIGN.md",
 		"tsconfig.json": "tsconfig.*.json, env.d.ts",
 		"vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*, pages.config.*, manifest.config.*, uno.config.*, volar.config.*, *.env, .env.*, alova.config.*",
 		"package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .prettier*, prettier*, .editorconfig, tsconfig.json, LICENSE, .gitattributes, .gitignore, .gitpod.yml, CNAME, .npmrc, .browserslistrc, .nvmrc, renovate.json",
