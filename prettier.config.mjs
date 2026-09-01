@@ -27,6 +27,11 @@ const config = {
 				requirePragma: true,
 			},
 		},
+		{
+			files: [".vscode/extensions.json", ".vscode/settings.json"],
+			parser: "jsonc",
+			trailingComma: "none",
+		},
 	],
 
 	singleQuote: false,
