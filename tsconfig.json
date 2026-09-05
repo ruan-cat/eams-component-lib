@@ -2,6 +2,11 @@
 	"extends": "./tsconfig.base.json",
 	"exclude": ["**/dist", "**/node_modules"],
 	"compilerOptions": {
+		// === 2026-09-05 优化：tsserver 内存降级（PLAN v2 Task D Batch 1） ===
+		"skipLibCheck": true,
+		"incremental": true,
+		"tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo",
+
 		"paths": {
 			"@packages/*": ["./packages/*/src"],
 			"@apps/*": ["./apps/*/src"]

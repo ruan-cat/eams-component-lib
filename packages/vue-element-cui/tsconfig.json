@@ -7,6 +7,15 @@
 		"noEmitOnError": false,
 		"sourceMap": false,
 		"declarationMap": false,
+
+		// === 2026-09-05 优化：tsserver 内存降级（PLAN v2 Task B） ===
+		"skipLibCheck": true,
+		"incremental": true,
+		"tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo",
+		"assumeChangesOnlyAffectDirectDependencies": true,
+		"disableSolutionSearching": true,
+		"disableReferencedProjectLoad": true,
+
 		"paths": {
 			"@/*": ["./src/*"],
 			"@eams-monorepo/vue-element-cui": ["./src/index.ts"]
@@ -14,5 +23,14 @@
 		"types": ["vite/client", "vitest/globals"]
 	},
 	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "package.json"],
-	"exclude": ["node_modules", "dist", "**/*.test.ts"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"**/*.test.ts",
+		"**/*.spec.ts",
+		"coverage",
+		"**/__tests__/**",
+		"**/__mocks__/**",
+		"**/node_modules/**"
+	]
 }
