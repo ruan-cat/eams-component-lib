@@ -31,9 +31,7 @@ jobs:
       - name: 安装pnpm
         uses: pnpm/action-setup@v5
         with:
-          run_install: |
-            - recursive: true
-            - args: [--global, "npm"]
+          run_install: false
 
       - name: 安装node
         uses: actions/setup-node@v6
@@ -42,8 +40,12 @@ jobs:
           cache: pnpm
           registry-url: "https://registry.npmjs.org"
 
-      - name: corepack手动再安装一次pnpm
-        run: corepack enable && corepack install
+      # pnpm 12 下 action-setup 的 run_install args 全局安装会报
+      # ERR_PNPM_GLOBAL_BIN_DIR_NOT_IN_PATH，改为显式步骤执行
+      - name: 安装依赖与全局 npm
+        run: |
+          pnpm install -r
+          pnpm add -g npm
 
       # 目前对于该项目来说，是不需要构建发布东西的
       # - name: Build
