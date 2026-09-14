@@ -41,11 +41,10 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       # pnpm 12 下 action-setup 的 run_install args 全局安装会报
-      # ERR_PNPM_GLOBAL_BIN_DIR_NOT_IN_PATH，改为显式步骤执行
-      - name: 安装依赖与全局 npm
-        run: |
-          pnpm install -r
-          pnpm add -g npm
+      # ERR_PNPM_GLOBAL_BIN_DIR_NOT_IN_PATH，改为显式步骤执行；
+      # 本工作流用 gh CLI 创建 release，无需全局 npm
+      - name: 安装依赖
+        run: pnpm install -r
 
       # 目前对于该项目来说，是不需要构建发布东西的
       # - name: Build
