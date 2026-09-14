@@ -5,7 +5,7 @@
 	"private": true,
 	"version": "2.0.2",
 	"type": "module",
-	"packageManager": "pnpm@10.32.1",
+	"packageManager": "pnpm@12.4.1",
 	"engines": {
 		"node": ">=20.19.0 || >=22.12.0 || >=24.0.0"
 	},
@@ -74,13 +74,6 @@
 		"@eams-monorepo/vue-element-cui": "workspace:^",
 		"@eams-monorepo/vue-element-cui-nuxt": "workspace:^",
 		"entities": "^7.0.1"
-	},
-	"pnpm": {
-		"overrides": {
-			"entities": "7.0.1",
-			"nuxt-og-image": "5.1.9",
-			"tsdown@0.3.1>rolldown": "1.0.0-beta.13-commit.024b632"
-		}
 	},
 	"author": {
 		"name": "ruan-cat",

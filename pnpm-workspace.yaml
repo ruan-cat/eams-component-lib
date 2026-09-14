@@ -7,6 +7,23 @@ overrides:
   "@intlify/core-base": "11.3.0"
   "@intlify/shared": "11.3.0"
   entities: "^7.0.1"
+  nuxt-og-image: "5.1.9"
+  # pnpm 12 起仅认本文件的 overrides（package.json 的 pnpm 字段已移除支持）；
+  # tsdown@0.3.1 依赖 rolldown@nightly，npmmirror 无该 dist-tag，故钉版
+  "tsdown@0.3.1>rolldown": "1.0.0-beta.13-commit.024b632"
+
+# pnpm 12：onlyBuiltDependencies 不再授予构建权限，改用 allowBuilds
+allowBuilds:
+  "@carbon/icons": true
+  "@parcel/watcher": true
+  core-js: true
+  ejs: true
+  es5-ext: true
+  esbuild: true
+  sharp: true
+  simple-git-hooks: true
+  vue-demi: true
+  yorkie: true
 
 onlyBuiltDependencies:
   - "@carbon/icons"
