@@ -184,10 +184,10 @@ compatibilityDate: {
 
 ---
 
-我准备关闭本次回话了，请你做好必要的 memorix 存储，用 `.claude\skills\fix-bug\record-bug-fix-memory\SKILL.md` 记录必要的经验教训。
+我准备关闭本次回话了，请你做好必要的 memorix 存储，用 `.agents\skills\record-bug-fix-memory\SKILL.md` 记录必要的经验教训。
 
 ## 007 <!-- 已完成 2026-9-1 codex pro20正在做 --> 重新执行一次 init-ai-md
 
-提供 prettier 的 pr 模板，把 `.claude\skills\fix-bug\record-bug-fix-memory` 迁移到正确的位置，该位置过时过期了。
+提供 prettier 的 pr 模板，把 `.agents\skills\record-bug-fix-memory` 迁移到正确的位置，该位置过时过期了。
 
 ## 008 <!-- TODO: -->
