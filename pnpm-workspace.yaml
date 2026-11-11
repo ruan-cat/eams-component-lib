@@ -2,10 +2,6 @@ packages:
   - packages/*
 
 # pnpm 12：onlyBuiltDependencies 不再授予构建权限，改用 allowBuilds
-overrides:
-  # Vercel 以根 manifest 生成函数闭包；parse5 的 entities 必须与根声明同版本，否则闭包缺包（2026-08-31 历史实证）
-  entities: ^7.0.1
-
 allowBuilds:
   "@carbon/icons": true
   "@parcel/watcher": true

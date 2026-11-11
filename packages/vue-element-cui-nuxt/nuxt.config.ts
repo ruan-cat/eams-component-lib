@@ -78,6 +78,12 @@ export default defineNuxtConfig({
 	},
 
 	nitro: {
+		vercel: {
+			functions: { runtime: "nodejs22.x" },
+		},
+		externals: {
+			traceOptions: { exportsOnly: false },
+		},
 		prerender: {
 			// document-driven 模式必须预渲染，否则运行时 content 数据库为空
 			crawlLinks: true,
