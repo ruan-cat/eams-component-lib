@@ -263,3 +263,19 @@ Nuxt4 依赖升级与本地验收**已完成**；Vercel 上线的剩余阻塞是
 - B. 维持现状：生产运行 Nuxt3 良好部署；Nuxt4 保留在 main 与本地，待上游 nitro/#36792 修复后恢复 Git-integration。
 
 **操作警示**：每次 `git push main` 都会触发 Vercel Git 自动生产部署（Nuxt4 坏产物），覆盖手动 promote 的良好部署；恢复生产后须停止 push 或暂停 Git 自动部署。本轮已多次执行 `vercel promote …b85yf03xd… --yes` 恢复 Nuxt3 保活。
+
+## 14. 上线成功（Linux CI prebuilt + UI 链 inline）
+
+**最终打通路径**（用户授权后落地）：
+
+1. `vercel pull --environment=production` 取 `orgId=team_cUeGw4TtOCLp0bbuH8kA7BYH` / `projectId=prj_7cDZNStr1RclXLCFbL8OsGE3RZ68`。
+2. `gh secret set VERCEL_TOKEN / VERCEL_ORG_ID / VERCEL_PROJECT_ID -R ruan-cat/eams-component-lib`（token 仅经 stdin，不落文件/记忆/日志）。
+3. `vercel git disconnect --yes` 暂停 Git 自动生产部署（避免 push 覆盖）。
+4. **关键最后一修**：`externals.inline` 纳入 **element-plus 及整条 UI 依赖链**（@element-plus/icons-vue、@popperjs/core、@sxzz/popperjs-es、@vueuse/core/shared、reka-ui、defu、debug、lodash-es/unified、async-validator、memoize-one、normalize-wheel-es、@ctrl/tinycolor、dayjs）。此前 element-plus 被外部化、运行时 import `@popperjs/core`(alias) 而闭包缺包致 500；全链 inline 后构建期解析依赖。
+5. `gh workflow run deploy-vercel-prebuilt.yaml` → Linux 构建 + symlink 校验 + `vercel deploy --prebuilt --prod` 全绿。
+
+**生产验收（真实 Chrome）**：`https://vec.ruan-cat.com/` 200（58068B，Nuxt4）；`/components/data-display/table` 200，el-table 1/3 行、代码面板"收起↔展开"、暗色 dark↔light、侧栏 29 链接、26 图标，交互全活。**Nuxt4 已上线生产。**
+
+**已知 minor（cosmetic，不阻塞访问与使用）**：header logo 经 `/_ipx/_/logo.svg`、`logo-dark.svg` 404（@nuxt/image ipx 在 Vercel 对 SVG 优化失败）。后续可将 logo 改 plain `<img>` 或配置 image provider 绕过 ipx。
+
+**复用要点**：Nuxt4 + shadcn-docs-nuxt 上 Vercel 的完整可行配方 = §0.5 配置组合 + **element-plus 全 UI 链 inline** + **Linux CI prebuilt 部署**（Git 自动部署须暂停）。Windows 本地产物仅用于 dev/preview 验收。
