@@ -190,4 +190,107 @@ compatibilityDate: {
 
 提供 prettier 的 pr 模板，把 `.agents\skills\record-bug-fix-memory` 迁移到正确的位置，该位置过时过期了。
 
-## 008 <!-- TODO: -->
+## 008 <!-- TODO: qoder cn --> 根据现成的关键经验，对本项目的依赖做合理的升级，并解决 shadcn-docs-nuxt 系列依赖故障
+
+1. 用 memorix+embedding 模型，在 `D:\code\ruan-cat\shadcn-docs-nuxt-production-repro` 项目内，获取到关于 shadcn-docs-nuxt 文档框架必要的沉淀和经验教训。
+2. 在 shadcn-docs-nuxt-production-repro 项目内阅读其内部的文档体系，认真获取其依赖升级的处理方案。
+3. 在本项目内，完成真实的依赖升级，并彻底克服掉 shadcn-docs-nuxt 项目出现的一系列问题。
+
+### 验收标准
+
+1. 项目的内置 nuxt 版本是 nuxt4 而不是 nuxt3。
+2. nitro 必须是 nitro v3 ，不允许降级。
+3. h3 依赖必须是高版本的。不是低版本的。
+4. 先清空全部的 turbo 构建缓存和 node 依赖，重新安装依赖，确保本地运行 dev 和 preview 环境下，使用本机的谷歌浏览器均可以完成页面访问与使用。
+5. 对你全部的修改，使用 git-commit 技能，分门别类的完成提交。再触发部署的情况下，检查生产环境 https://vec.ruan-cat.com/ 是否能够继续在浏览器内完成访问并使用。
+6. 最后在 `docs\reports\2026-11-11-up` 目录内编写你的升级的具体举措，和遇到其他困难的解决方案，我在将在其他的项目内复用你的经验教训，一并解决其他项目出现的故障。
+
+### 依赖与构建工件的删除
+
+我其实有点不信任我们现在的 turbo 缓存体系了，我要求你及时的完成清理，避免我们再次出现类似于 turbo 缓存干扰了我们 monorepo 项目内依赖体系的更新问题。
+
+```bash
+rimraf -g '**/{dist,.turbo,.vercel,.output,.cache,.temp}'
+rimraf -g '**/{node_modules,package-lock.json,pnpm-lock.yaml}'
+```
+
+### 浏览器工具
+
+你应该大规模的使用 agent browser、use-agent-browser、browser-use、谷歌浏览器 MCP 这样的工具，完成本地的浏览器实机测试。
+
+### 任务说明
+
+这是一个需要深度探究过往经验教训，以及联调处理故障的任务。你应该动态安排子代理深度的探究清楚过往曾经出现的严重故障，和我们现有的解决方案。然后再开始对本项目做处理。
+
+确保 pnpm-workspace.yaml 和 packages\vue-element-cui-nuxt\nuxt.config.ts 配置经可能简单。
+我相信我们在 `D:\code\ruan-cat\shadcn-docs-nuxt-production-repro` 项目内探究的各种经验教训和实验，已经有充足的结论来解决我们项目的依赖配置和和 nuxt 配置，nuxt 本地构建与打包的各种故障了。你负责深度的从 shadcn-docs-nuxt-production-repro 项目内得到充分的经验教训和知识点，然后解决我们项目的曾经出现的一系列问题。
+
+全局技能 init-shadcn-docs-nuxt 对于本任务来说，肯定是过时的，只能作为参考。真正有价值的还是 shadcn-docs-nuxt-production-repro 项目本身的 git 历史提交，不同的分支实验，以及具体的文档经验教训和解决方案。
+
+1. pnpm-workspace.yaml 和对应的 package.json， 我预期是不应该出现很多很脏的依赖版本锁死的做法。我们曾经的很多解决方案，都是写实依赖关系才解决问题的，我们做了那么多的 shadcn-docs-nuxt-production-repro 实验，我们肯定是有不锁依赖，直接升级到最高版本的解决方案的。
+2. 认真检查在和 agent 协作开发的情况下，项目是否还会出现内存不足的情况。我们的具体执行的 agent 肯定是消耗内存的。我担心现在本项目还是会出现这样的内存不够的错误。认真看看 shadcn-docs-nuxt-production-repro 实验提供的经验教训。
+
+### 2026-11-11
+
+我不能接受你说的 `Nuxt4 部署 Vercel 失败：函数闭包逐包缺 ufo/devalue/entities；本地 vercel 产物闭包完整、Vercel 云端缺包 → nitro 2.13.6 vercel preset / Vercel NFT 上游问题。五轮配置尝试均无效。` 这个结论，难道在 shadcn-docs-nuxt-production-repro 项目内之前就没有认真的试验过这个东西么？你这边认真看过 memorix 的历史记录么？你这边用 memorix 的时候有认真使用 embedding 来查询经验教训和关键发现么？
+我要求你继续在这个方向上研究，先安排子代理去看看 shadcn-docs-nuxt-production-repro 项目的 memorix 记录和这个项目内部的文档库，然后你再调整计划和方向，继续去尝试解决这个问题。会不会你的 nitro 配置里面缺少了对于 vercel 平台的专门配置呢？你去看看 vercel 平台的配置项项。去看 vercel、nuxt4、和 nitro 的官方文档。
+
+---
+
+<!-- TODO: -->
+
+面对现在的 externals.traceInclude，面对现在的本地与云端 vercel 依赖构建差异问题，你现在能结合过往 memorix 内的经验教训，给我一个你更新后的实战结论么？你打算该这么完成优雅的，免 hack 的依赖配置呢？你能直接更新 `docs\reports\2026-11-11-up\2026-11-11-nuxt4-dependency-upgrade.md` 报告么？
+
+<!-- TODO: -->
+
+```markdown
+截至今天，Nuxt 最新版 4.6.4 仍绑定 nitropack ^2.13.6 + h3 ^1.15.11，没有任何 Nuxt 版本跑在 nitro v3 上
+nuxt@4.6.4 → @nuxt/nitro-server@4.6.4 → nitropack ^2.13.6 + h3 ^1.15.11。即今天的 Nuxt 4 仍然跑在 Nitro 2 + h3 v1 上。
+```
+
+按照你的说法，岂不是我们其他项目也是很痛苦么？我们的其他项目就是用 nitro v3 的，在这种已经有完整 nitro v3 接口的情况下，我们的其他项目岂不是容易出现依赖故障？D:\code\ruan-cat\shadcn-docs-nuxt-production-repro 项目的 api 接口，
+D:\code\ruan-cat\shadcn-docs-nuxt-production-repro\apps\api\package.json 用的就是 nitro v3 ，你确定是在单独的 api 子包内，约束成 nitro v3 接口是不会导致其他 shadcn-docs-nuxt 的文档站点出现错误的，是么？你这边能拿的出 `shadcn-docs-nuxt-production-repro` 项目的真实验证报告么？还有相关的经验教训与 memorix 记忆？
+
+在你 packages\vue-element-cui-nuxt\nuxt.config.ts 内，我确实很不喜欢你写的：
+
+```ts
+	// Vite 8 的 rolldown 依赖优化器会把 @tailwindcss/oxide 的原生 .node 当 UTF-8 JS 解析而崩溃，
+	// 留下半写的 deps 缓存（nostics.js 永久 pending），dev 客户端模块图卡死、hydration 失效。
+	vite: {
+		optimizeDeps: {
+			exclude: ["@tailwindcss/oxide", "@tailwindcss/oxide-win32-x64-msvc"],
+		},
+		ssr: {
+			optimizeDeps: {
+				exclude: ["@tailwindcss/oxide", "@tailwindcss/oxide-win32-x64-msvc"],
+			},
+		},
+	},
+```
+
+这个情况现在是 `shadcn-docs-nuxt-production-repro` 项目的最优解么？这个做法是最正确的么？我很不希望看到 nuxt 配置如此复杂，杂七杂八的，难道我们在这个 `shadcn-docs-nuxt-production-repro` 项目内还没有得到最优解的依赖解决方案么？你确定这个配置没有收到 turbo 构建缓存或者是其他的 dist 产物包过时的影响么？
+
+在 D:\code\ruan-cat 内，还有哪个 git 项目使用了 shadcn-docs-nuxt 这个依赖包？我不太记得了。
+
+---
+
+<!-- TODO: -->
+
+```plain
+	nitro: {
+		// Vercel NFT 闭包不含外部化包的传递依赖（ufo/entities），将导入方内联进 server bundle
+		externals: {
+			inline: ["vue-bundle-renderer", "parse5"],
+		},
+```
+
+你在 packages\vue-element-cui-nuxt\nuxt.config.ts 的这个处理方式，是不是又把问题兜回来了？是不是又回到单独处理依赖 hack 的情况了？难道我们 shadcn-docs-nuxt-production-repro 项目内部没有合适的经验教训和具体的实验结果么？还是说你这边没有认真去阅读 memorix 提供的经验教训呢？你在 `docs\reports\2026-11-11-up\2026-11-11-nuxt4-dependency-upgrade.md` 的文档是不是过时了？
+
+---
+
+<!-- TODO: -->
+
+`机制实锤：.func/node_modules 里是指向 Windows 绝对路径的 symlink（/d/code/…/.nitro/<pkg>@<ver>），因 devalue/hookable/ufo/entities 等存在多版本，nitro 用 linkPackage 建链接；上传到 Linux Vercel 后这些 Windows 绝对链接全部失效 → 逐包缺包。本地 Windows 能解析所以"本地绿"。修法：把这一组多版本包目标性 inline 进 bundle，消除 symlink。`
+我记得我们的 shadcn-docs-nuxt-production-repro 项目曾经是有关于这个部分的经验教训的，你是不是用 memorix 检索的时候不到位，所以才在本项目再次犯错呢？
+
+## 009 <!-- TODO: -->
