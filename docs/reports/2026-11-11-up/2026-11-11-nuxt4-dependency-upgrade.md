@@ -230,3 +230,14 @@ db70bc9 📦 deps(nuxt-doc)!: 升级 Nuxt 4 与 shadcn-docs-nuxt 全量最新依
 ### 13.4 结论
 
 Nuxt4 依赖升级与本地验收**已完成**；Vercel 上线的剩余阻塞是**云端 Git 构建的 nitro/pnpm 闭包追踪回归**（非本仓配置可解），repro 亦未在其上部署过 Nuxt4（F48/F50 上游 #36792 待修复）。**合理方案 = Linux CI prebuilt 部署**（已提供 workflow），或待上游修复后恢复 Git-integration。生产当前运行 Nuxt3 良好部署，可用。
+
+### 13.5 运行时实证：Windows 自包含产物亦不可移植（R53 结论的运行时验证）
+
+将本地 `symlink=0` 的自包含 prebuilt 产物经 `vercel deploy --prebuilt` 上传并 promote 到生产，**仍 500**；而同一产物在本地 Windows node-server 全绿。证明 Windows 构建产物内含不可移植的构建机绝对路径（不止 symlink），**换机（Linux Vercel）即断**——与 R53「Windows 产物换机即断」的推断一致，本次为运行时实锤。**结论：Nuxt4 上 Vercel 必须在 Linux 构建**（CI prebuilt），Windows 本地产物仅用于本地 dev/preview 验收。
+
+**落地路径（二选一，需授权）**：
+
+- A. 启用 [`.github/workflows/deploy-vercel-prebuilt.yaml`](../../../.github/workflows/deploy-vercel-prebuilt.yaml)：配置 `VERCEL_TOKEN/VERCEL_ORG_ID/VERCEL_PROJECT_ID` secrets，并**暂停 Vercel Git-integration 自动生产部署**（否则每次 push 覆盖手动部署），手动 dispatch 上线 Nuxt4。
+- B. 维持现状：生产运行 Nuxt3 良好部署；Nuxt4 保留在 main 与本地，待上游 nitro/#36792 修复后恢复 Git-integration。
+
+**操作警示**：每次 `git push main` 都会触发 Vercel Git 自动生产部署（Nuxt4 坏产物），覆盖手动 promote 的良好部署；恢复生产后须停止 push 或暂停 Git 自动部署。本轮已多次执行 `vercel promote …b85yf03xd… --yes` 恢复 Nuxt3 保活。
