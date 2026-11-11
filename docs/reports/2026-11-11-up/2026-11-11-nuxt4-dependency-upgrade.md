@@ -367,3 +367,33 @@ Nuxt4 依赖升级与本地验收**已完成**；Vercel 上线的剩余阻塞是
 - commits：`1de7835`/`cbff648`（过早结论）、`e8eead0`（workflow 新增）、`6d99df1`（inline 真修复）、`1dfccdd`（B 触发）、`eb1c5f5`（workflow 删除）、`22ce69c`（§17 裁决）。
 - memorix：#6266（配置层返工）、#6267（B 裁决）、**#6268（本绕远路误区）**。
 - §13.4/§13.5/§14 保留作废老结论作反面教材；现行态以 §17 与本节为准。
+
+## 19. traceInclude 方案作废裁决与免 hack 依赖配置终态（2026-11-12 用户质询补录）
+
+### 19.1 traceInclude 已过时且错误：实机证伪 + 机理错配
+
+- **实机证伪**（技能 init-shadcn-docs-nuxt 1.9.0 `dependency-triage.md` §6.3，2026-09-05 Vercel linux 生产）：nitro 在 pnpm 下把 traceInclude 包名 resolve 成 `<pkg>/sharp` 伪路径交给 `@vercel/nft`，nft 对不存在文件抛硬错误 → 构建失败。且该分支**仅非 win32 生效**，Windows 本地构建永远走不到——跨平台构建分支必须在目标平台实测后才能合入。
+- **机理错配**：traceInclude 只往 NFT trace 加路径，**不改变 nitro 外部化决策**。Nuxt4 云端 500 的真根因是 element-plus 外部化 + popper alias 运行时 import 闭包缺包（§14，`6d99df1`）；多版本 Windows 绝对 symlink 由 overrides dedupe 源头消除（§12.2）。这两个故障面 traceInclude 都解决不了：加 trace 路径救不了「外部化包的运行时 import」，也消不掉 linkPackage symlink。
+- **历史定位**：traceInclude 与 `isWindows ? trace:false` 同属历史 workaround 族——后者已被 inline 替换（CHANGELOG `213d8d5`），前者被实机证伪作废。**现行 eams `nuxt.config.ts` 无任何 traceInclude**（仅 `traceOptions.exportsOnly:false`，:122）。
+
+### 19.2 报告与 memorix 的成熟方案（质询回答）
+
+- **报告已有成熟方案**：§0.5 配置配方 + §12.2 产物级修法（inline 多版本包族 + dedupe 闭包 symlink 归零）+ §14/§17 终态（Git-integration 云端自建）。本节补 traceInclude 的显式作废登记。
+- **memorix 已有正式方案**：#6262（配置矩阵与配方）、#6267/#6268（通道裁决与绕远路误区）、**#6270（traceInclude 作废专条）**；#6261–6264 的中间结论已于 2026-11-12 作废标注。
+- **技能已固化**：`nuxt4-upgrade.md` §5/§6（dedupe + 条件 inline 配方）、`dependency-triage.md` §6.3（traceInclude 禁用铁律）、SKILL.md 事故 #22。
+
+### 19.3 优雅、免 hack 的依赖配置终态
+
+1. **默认最小**：不消费 element-plus 的文档站完全不配 `nitro.externals`（技能禁改项）。
+2. **条件精确准入**：消费 element-plus 的文档站用 §0.5 / `nuxt4-upgrade.md` §6 精确 inline 列表，每项带可删除条件；上游 NFT pnpm isolated 追踪修复（nuxt#13644 家族）后凭产物级回归证据整表退役——inline 是「有证据、可删除的精确准入」，不是盲 hack。
+3. **源头消多版本**：overrides dedupe `entities`/`source-map-js`（pnpm 12 写 pnpm-workspace.yaml），linkPackage 不再产绝对 symlink——属配置治理，非运行时补丁。
+4. **世代与对象作用域**：`buildDir:".nuxt"`（F50）、popper ESM alias（manifest 声明）、oxide 双 exclude（dev）、ogImage disabled、compatibilityDate 按对象分域。
+5. **四禁**：`trace:false`、`traceInclude`、hoist/shamefully-hoist、广谱 inline——均有实机证伪或反模式证据。
+6. **通道终态**：Git-integration push 即部署（§17）；Windows 产物仅本地 dev/preview 验收（R53 适用面）。
+
+**一句话回答**：traceInclude 已作废；成熟方案在报告 §0.5/§12.2/§17、memorix #6262/#6267/#6268/#6270、技能 1.9.0；免 hack 的本质 = 默认最小 + 条件精确准入 + 源头 dedupe + 可删除条件，而不是堆 trace 补丁。
+
+### 19.4 证据索引
+
+- 技能 `dependency-triage.md` §6.3（2026-09-05 实机证伪）、SKILL.md 事故 #22；CHANGELOG `213d8d5`（inline 替换 trace:false）；eams `nuxt.config.ts:122`（现状无 traceInclude）。
+- memorix #6270（traceInclude 作废专条）；报告 §12.2/§14/§17/§18。
