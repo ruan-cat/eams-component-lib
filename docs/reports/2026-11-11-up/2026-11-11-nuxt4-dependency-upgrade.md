@@ -188,3 +188,24 @@ db70bc9 📦 deps(nuxt-doc)!: 升级 Nuxt 4 与 shadcn-docs-nuxt 全量最新依
 - 仓库 main 已含完整 Nuxt4 升级（14 个分类提交），本地 dev/preview/测试/双 preset 构建全绿；`pnpm-workspace.yaml` 仅 packages+allowBuilds+entities override，`nuxt.config.ts` 无 noExternal/alias/shim/inline。
 - **未决**：① Nuxt4 的 Vercel 部署（上游阻塞）；② nitro v3 / h3 v2 作为 Nuxt 运行时（生态不可行，§4）。
 - 可选方向（需用户决策）：a) 生产暂留 Nuxt3，Nuxt4 待上游 nitro/Vercel 修复后再部署；b) 改部署目标为 node-server 自托管 / Cloudflare（绕开 Vercel NFT）；c) 向上游 nitro/nuxt 提 issue 附本报告证据链。
+
+## 12. 二轮深挖修正（用户质疑后，memorix embedding + 官方文档 + 产物级取证）
+
+### 12.1 真正根因：nitro 闭包内的 Windows 绝对 symlink
+
+对本地 `.vercel/output/functions/__fallback.func/node_modules` 取证发现 **13 个 symlink**，目标为 Windows 绝对路径 `…/.func/node_modules/.nitro/<pkg>@<ver>`。成因：`ufo/devalue/hookable/unhead/entities/source-map-js` 等存在**多版本**，nitro `linkPackage` 用 symlink 而非拷贝。Vercel 运行时挂载点为 `/var/task` ≠ 构建路径，绝对 symlink 全部失效 → 逐包 `ERR_MODULE_NOT_FOUND`。**本地 Windows 构建路径==本地解析路径，故"本地绿、线上红"。** 官方文档证实 Vercel 对 prebuilt `.func` **原样部署、不二次裁剪**（Build Output API v3 Primitives），闭包完全由构建期 NFT 决定。
+
+### 12.2 已验证有效的产物级修法
+
+- `nitro.externals.inline` 目标性内联多版本包族 + `pnpm.overrides` dedupe `entities:^7.0.1`、`source-map-js:^1.2.1` → 本地 `.func` **symlink 归零**、闭包自包含（ufo/devalue/entities/hookable/element-plus 全 PRESENT）。
+- `nitro.externals.traceOptions.exportsOnly:false`、`nitro.vercel.functions.runtime:"nodejs22.x"` 一并配置。
+- 撤掉 hoist（nuxt#13644 实证 `--shamefully-hoist` **破坏** NFT 追踪，是反模式）；`@popperjs/core` 由 npm alias 改回真实包（alias 追踪漏包）。
+- 该自包含产物经 `vercel deploy --prebuilt` 上传为预览部署 **Ready**，证明产物本身可部署。
+
+### 12.3 仍未闭环：Vercel Git-integration 云端构建
+
+云端（Linux）自行构建的闭包仍逐包缺包（ufo→hookable→@popperjs/core 打地鼠），与本地自包含产物不一致；判定为 **nitro 2.13.6 在 pnpm isolated 布局下 NFT 追踪不可靠（nitro#106 家族）+ Git-integration 云端构建路径**叠加。可靠路径为：**在 Linux CI 构建 prebuilt 产物后 `vercel deploy --prebuilt`**（或直接部署本地已验证的自包含产物），绕开云端 Git 构建。
+
+### 12.4 生产最终态
+
+`vercel promote` 回升级前 Nuxt3 良好部署（`dpl_HEML5X9vuovUZsSEXi862veRzQYx`），全路由 cache-busted 复核 200（/、/getting-started、/components/data-display/table、/guidelines/component-design、/updates/changelog）。**生产可用；Nuxt4 成果保留在 main 与本地，待部署路径决策后上线。**
