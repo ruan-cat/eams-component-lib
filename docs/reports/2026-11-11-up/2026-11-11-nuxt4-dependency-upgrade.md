@@ -326,3 +326,44 @@ Nuxt4 依赖升级与本地验收**已完成**；Vercel 上线的剩余阻塞是
 **修正先前结论**：§14/§16 中"云端构建不可靠/必须 Linux CI prebuilt"的表述**作废**——那是 inline 修复前的观测；根因（element-plus 外部化+popper alias 闭包）修复后，Git-integration 云端自建与本地/CI 产物一致可靠。Windows 产物 symlink 不可移植（R53）仍成立，但只影响"本地 Windows 产物直接上传"，不影响云端 Linux 自建。
 
 **最终部署形态**：Git-integration 自动部署（push main → Vercel 云端 Linux 自建 → 生产）。配置最简：无 prebuilt 工作流、无 node-linker/hoist、无广谱 inline；仅 §0.5 精确 inline 列表 + dedupe overrides + buildDir + popper alias + oxide exclude + logo routeRules（本地 ipx 回退用）。
+
+## 18. 绕远路误区专记：误归因→过度设计部署通道→对照实验删除
+
+与 §16 互补：§16 记**配置层**返工（激进删除→补回），本节记**部署架构层**返工（过度设计 workflow→删除）。两者同根：过早结论 + 跳过单变量纪律。memorix 专条 **#6268**（topic: `nuxt4/deployment-detour-lesson`）。
+
+### 18.1 误区时间线
+
+| 阶段 | 动作/结论                                                                             | commit/出处              | 问题                                                                                          |
+| ---- | ------------------------------------------------------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------- |
+| 1    | 云端 Git 构建 500：ERR_MODULE_NOT_FOUND ufo→hookable→@popperjs/core                   | —                        | 症状是闭包缺包，指向**配置**（externals/inline），不指向通道                                  |
+| 2    | 过早归因「上游阻塞」                                                                  | `1de7835`                | 未穷尽单变量实验                                                                              |
+| 3    | 把 R53「Windows 产物不可移植」当云端 500 唯一根因                                     | `cbff648`、§13.5         | R53 适用面仅「本地 Windows 产物直接上传」；云端 Linux 自建不经 Windows 产物——两个故障面被混淆 |
+| 4    | 过度设计：dispatch-only prebuilt workflow + git disconnect + 3 secrets + symlink 校验 | `e8eead0`                | 用整套平行部署基础设施绕一个配置问题；push 即部署退化为手动 dispatch                          |
+| 5    | 真修复仅一项精确配置：element-plus 及整条 UI 链 inline                                | `6d99df1`                | 闭包缺包消失                                                                                  |
+| 6    | 把 CI prebuilt 绿归因于「通道可靠」                                                   | §14                      | **混淆变量**：修复与通道切换同时落地，成功不能归因于通道                                      |
+| 7    | B 单变量对照：重连 Git、inline 不变、空提交触发云端自建                               | `1dfccdd`→`3yogcoepp` 绿 | 隔离通道变量 ⇒ 云端自建同样可靠                                                               |
+| 8    | 删 workflow、恢复 Git 自动部署                                                        | `eb1c5f5`、§17           | 过度设计清除，回归最简                                                                        |
+
+### 18.2 最隐蔽的一步：混淆变量
+
+当时 CI prebuilt 绿其实是 **inline 修复**的功劳，但因为它发生在**新通道**上，就被误认为通道是原因——等于「同时吃两种药把病治好，却归功于第二种」。B 实验是补做的归因对照：inline 修复保持不变、只换通道变量，结果绿 ⇒ 通道不是原因。**修复与基础设施变更同时落地时，成功归因无效**；必须补单变量对照，再决定基础设施去留。
+
+### 18.3 成本账
+
+- 加了又删：1 个 workflow（`e8eead0`→`eb1c5f5`）、git disconnect→reconnect、多次手动 dispatch/promote；secrets 保留备用。
+- 生产通道 push 即部署→手动 dispatch→push 即部署；期间每次 push 都须防覆盖（§13.5 操作警示即过度设计的产物）。
+- 同一根因产出三版 serial 作废结论（§13.4 上游阻塞→§13.5 Windows 唯一根因→§14 必须 CI prebuilt）——过早结论的代价是串行返工。
+
+### 18.4 可复用纪律（其他项目同样适用）
+
+1. **配置优先、通道最后**：构建/运行时 500 先穷尽配置级单变量实验（externals/inline/alias/overrides）；基础设施（CI workflow、换通道、换平台）是最后手段，不是第一手段。
+2. **修复与基础设施同时落地 ⇒ 归因无效**，补对照再定去留（§18.2）。
+3. **「云端/平台/上游不可靠」结论须对照实验支撑**；平台性事实限定适用面（R53 不泛化到云端自建）。
+4. **每加一层写明可删除条件**：本例 workflow 的可删除条件 =「含 inline 修复的云端自建绿」，B 实验命中即删。
+5. **动手前交叉核对技能与台账**：技能 incident-repair 早已写明 inline 精确准入、禁广谱 workaround；repro 台账早已限定 R53 适用面——先读可避免大部分绕路。
+
+### 18.5 证据索引
+
+- commits：`1de7835`/`cbff648`（过早结论）、`e8eead0`（workflow 新增）、`6d99df1`（inline 真修复）、`1dfccdd`（B 触发）、`eb1c5f5`（workflow 删除）、`22ce69c`（§17 裁决）。
+- memorix：#6266（配置层返工）、#6267（B 裁决）、**#6268（本绕远路误区）**。
+- §13.4/§13.5/§14 保留作废老结论作反面教材；现行态以 §17 与本节为准。
