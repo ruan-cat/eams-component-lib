@@ -24,7 +24,7 @@ const loadAppConfig = async () => {
 	vi.resetModules();
 	vi.stubGlobal("defineAppConfig", <T>(config: T) => config);
 
-	const module = await import("../../app.config.ts");
+	const module = await import("../../app/app.config.ts");
 
 	return module.default as DocsConfig;
 };

@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 import { mount } from "@vue/test-utils";
 
-import DemoCodePanel from "../../components/content/DemoCodePanel.vue";
-import DemoPlayground from "../../components/content/DemoPlayground.vue";
+import DemoCodePanel from "../../app/components/content/DemoCodePanel.vue";
+import DemoPlayground from "../../app/components/content/DemoPlayground.vue";
 
 describe("DemoPlayground", () => {
 	test("renders title, description, preview, and code area", () => {

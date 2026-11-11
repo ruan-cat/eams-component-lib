@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { mount } from "@vue/test-utils";
 
-import ApiTable from "../../components/content/ApiTable.vue";
+import ApiTable from "../../app/components/content/ApiTable.vue";
 
 describe("ApiTable", () => {
 	test("renders heading and slot content", () => {

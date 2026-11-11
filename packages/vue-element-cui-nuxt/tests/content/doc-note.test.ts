@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { mount } from "@vue/test-utils";
 
-import DocNote from "../../components/content/DocNote.vue";
+import DocNote from "../../app/components/content/DocNote.vue";
 
 describe("DocNote", () => {
 	test("renders warning tone and note copy", () => {
