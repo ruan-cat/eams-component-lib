@@ -314,3 +314,15 @@ Nuxt4 依赖升级与本地验收**已完成**；Vercel 上线的剩余阻塞是
 **根因（5-Why）**：返工←激进删除+广谱 workaround←未先完整读/应用技能与 repro 台账←把"配置简化"目标置于"单变量、可删除条件、产物级回归证据"纪律之上←急于交付绿信号。
 
 **纠正纪律（固化）**：① 动手前先读技能 incident-repair + repro FINDINGS/R53；② 删除任何运行时补丁前必须有产物级回归证据，否则保留；③ noExternal/inline/trace 精确准入、单变量、每项带可删除条件；④ 禁广谱 inline/hoist 通用解；⑤ 归因前穷尽单变量实验，不提前下"上游/平台"结论。
+
+## 17. B 对照实验：工作流去留由数据裁决（已闭环）
+
+**实验设计（单变量）**：重连 Git-integration → 推空提交触发云端自建（main 含 element-plus inline 修复）→ 实测生产。回滚锚点 `8vw81vnfg`（CI prebuilt 良好部署）。
+
+**结果：绿。** 云端自建 `3yogcoepp`（Duration 2m=真实云构建）生产 200；真实 Chrome：el-table 1/3 行、代码面板切换、暗色切换、侧栏 29、图标 26、**console 零 error**；logo 经 Vercel 自带 `/_vercel/image?url=%2Flogo.svg` 正常加载（`naturalWidth>0`）——**Git-integration 下 @nuxt/image 走 Vercel image provider，ipx 404 不复存在**。
+
+**裁决**：inline 修复后云端自建可靠 → **prebuilt 工作流属过度设计，删除**（`eb1c5f5`），恢复 Git-integration 自动部署（push 即部署，最简）。删除后生产复测 200。`VERCEL_*` secrets 保留备用。
+
+**修正先前结论**：§14/§16 中"云端构建不可靠/必须 Linux CI prebuilt"的表述**作废**——那是 inline 修复前的观测；根因（element-plus 外部化+popper alias 闭包）修复后，Git-integration 云端自建与本地/CI 产物一致可靠。Windows 产物 symlink 不可移植（R53）仍成立，但只影响"本地 Windows 产物直接上传"，不影响云端 Linux 自建。
+
+**最终部署形态**：Git-integration 自动部署（push main → Vercel 云端 Linux 自建 → 生产）。配置最简：无 prebuilt 工作流、无 node-linker/hoist、无广谱 inline；仅 §0.5 精确 inline 列表 + dedupe overrides + buildDir + popper alias + oxide exclude + logo routeRules（本地 ipx 回退用）。
