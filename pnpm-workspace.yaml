@@ -2,6 +2,11 @@ packages:
   - packages/*
 
 # pnpm 12：onlyBuiltDependencies 不再授予构建权限，改用 allowBuilds
+overrides:
+  # dedupe 多版本包，避免 nitro linkPackage 生成 Windows 绝对 symlink（Vercel Linux 失效）
+  entities: ^7.0.1
+  source-map-js: ^1.2.1
+
 allowBuilds:
   "@carbon/icons": true
   "@parcel/watcher": true

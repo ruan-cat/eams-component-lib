@@ -82,6 +82,19 @@ export default defineNuxtConfig({
 			functions: { runtime: "nodejs22.x" },
 		},
 		externals: {
+			// 多版本包会被 nitro linkPackage 成 Windows 绝对 symlink，上传 Linux Vercel 后失效；
+			// 目标性 inline 消除 symlink，使 .func 闭包自包含
+			inline: [
+				"ufo",
+				"devalue",
+				"entities",
+				"hookable",
+				"unhead",
+				"parse5",
+				"source-map-js",
+				"vue-bundle-renderer",
+				"h3",
+			],
 			traceOptions: { exportsOnly: false },
 		},
 		prerender: {
