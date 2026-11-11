@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DialogOverviewDemoContent from "~/app/components/demo/DialogOverviewDemo.vue";
+import DialogOverviewDemoContent from "~/demos/DialogOverviewDemo.vue";
 </script>
 
 <template>

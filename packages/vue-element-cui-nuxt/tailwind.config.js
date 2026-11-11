@@ -7,8 +7,8 @@ export default {
 	content: [
 		"./content/**/*",
 		"./app/**/*.vue",
-		"./components/**/*.vue",
-		"../../node_modules/shadcn-docs-nuxt/**/*.{vue,js,ts,mjs}",
+		"./app/components/**/*.vue",
+		"./node_modules/shadcn-docs-nuxt/**/*.{vue,js,ts,mjs}",
 	],
 	theme: {
 		container: {

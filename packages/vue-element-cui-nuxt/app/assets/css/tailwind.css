@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-@config "../../tailwind.config.js";
-@source "../../node_modules/shadcn-docs-nuxt";
+@config "../../../tailwind.config.js";
+@source "../../../node_modules/shadcn-docs-nuxt";
 
 @layer base {
 	*,
