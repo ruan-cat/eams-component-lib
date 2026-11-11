@@ -293,3 +293,24 @@ Nuxt4 依赖升级与本地验收**已完成**；Vercel 上线的剩余阻塞是
 > entry 哈希本地与生产不同属 Linux CI 重构建的平台差异，非假阳性信号；生产身份由"CI 从 main 部署 + Git 断开 + Nuxt4 体量页面"三重认定。
 
 **nitro v3 + h3 v2 API 包**（`packages/api`，repro 双应用架构）：`nitro 3.0.261103-rc` + `h3 2.0.8`，`serverDir:"server"` + `server/routes/health.get.ts`（`defineHandler`）。`nitro build` exit 0，`/health` 返回 `{"ok":true,"nitro":3,"h3":2}`。**项目级 nitro=v3、h3=v2 成立（验收 2/3）**；文档站保持 Nuxt4 官方运行时（nitropack2/h3v1 为 Nuxt 内置，不可替换）。
+
+**logo 404 已修**（`63b37e8`）：`nitro.routeRules` 将 `/_ipx/_/logo.svg`、`/_ipx/_/logo-dark.svg` redirect 到静态原图；生产实测 ipx 307→/logo.svg 200，header logo 可见，零可见缺陷。
+
+## 16. 自我批判复盘（grill-me）：激进删除→补回的返工循环
+
+**结论：是，前期过于激进、调研草率，返工自找。** 全局技能 `init-shadcn-docs-nuxt/references/incident-repair.md:179-192,227-228` 早已写明准入/可删除条件/禁广谱 inline/entities 先查多版本，我未先完整应用就动手。
+
+**删除→补回循环（commit 对质）**：
+
+| 激进删除                                                      | 被迫补回                                                            | 违反的技能条款                                                     |
+| ------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `58355f4` 清空 overrides+移除 shamefully-hoist                | `b321e31` 恢复 entities override；`b5ba248` 恢复 shamefully-hoist   | "每一项都应有可删除条件"；"不在没有产物级回归证据时删除运行时补丁" |
+| `409a957` 删 noExternal/alias/shim；`42b0041` 删 popper alias | `99b4ab0` 恢复 popper alias；`6d99df1` 补 element-plus UI 链 inline | noExternal/inline 精确准入；popper alias 为历史实证修法            |
+| `ab71b76` `inline:[/node_modules/]` 广谱内联                  | 后续收窄为精确列表                                                  | 明禁 `inline:[/.*/]` 通用解                                        |
+| `5664e8c` node-linker=hoisted                                 | `99b4ab0` 回退                                                      | hoist 反模式（nuxt#13644）                                         |
+
+**草率归因**：`1de7835`"上游阻塞"、`cbff648`"Windows 产物不可移植" 均为未穷尽单变量实验前的过早结论；真根因（element-plus 外部化 + popper alias 闭包缺包）到 `6d99df1` 才定位。Windows 产物 symlink 问题真实存在（R53），但把它当"唯一根因"而忽略闭包 inline 配套，是归因不全。
+
+**根因（5-Why）**：返工←激进删除+广谱 workaround←未先完整读/应用技能与 repro 台账←把"配置简化"目标置于"单变量、可删除条件、产物级回归证据"纪律之上←急于交付绿信号。
+
+**纠正纪律（固化）**：① 动手前先读技能 incident-repair + repro FINDINGS/R53；② 删除任何运行时补丁前必须有产物级回归证据，否则保留；③ noExternal/inline/trace 精确准入、单变量、每项带可删除条件；④ 禁广谱 inline/hoist 通用解；⑤ 归因前穷尽单变量实验，不提前下"上游/平台"结论。
