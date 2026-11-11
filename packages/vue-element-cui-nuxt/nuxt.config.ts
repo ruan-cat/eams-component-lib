@@ -81,6 +81,12 @@ export default defineNuxtConfig({
 		vercel: {
 			functions: { runtime: "nodejs22.x" },
 		},
+		// Vercel 上 ipx 无法优化 SVG（sharp 缺 librsvg）致 /_ipx/_/logo*.svg 404；
+		// 重定向到静态原图，保证 logo 可见
+		routeRules: {
+			"/_ipx/_/logo.svg": { redirect: "/logo.svg" },
+			"/_ipx/_/logo-dark.svg": { redirect: "/logo-dark.svg" },
+		},
 		externals: {
 			// 多版本包会被 nitro linkPackage 成 Windows 绝对 symlink，上传 Linux Vercel 后失效；
 			// 目标性 inline 消除 symlink，使 .func 闭包自包含
