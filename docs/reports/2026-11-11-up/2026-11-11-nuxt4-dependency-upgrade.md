@@ -17,6 +17,28 @@
 
 **核心发现：过去堆在 `nuxt.config.ts` / `pnpm-workspace.yaml` 里的大量"脏补丁"，治的都是症状；真正的根因只有两处（Nuxt 4.6 的 buildDir 迁移、Vite 8 rolldown 对原生 addon 的优化崩溃），各用一行/一段配置即可根治。** 升级后 `pnpm-workspace.yaml` 零 overrides，`nuxt.config.ts` 从 124 行降到 ~80 行且不含任何 noExternal/alias/shim。
 
+## 0.5 核心落地经验（可直接复用到其他 shadcn-docs-nuxt / Nuxt 项目）
+
+**已验证绿的最终配置组合**（本地 dev/preview/测试全绿）：
+
+| 项                                                       | 值                                                                                                            | 治什么                                                                                  |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| nuxt                                                     | `4.6.4`                                                                                                       | 目标世代                                                                                |
+| nitropack                                                | `2.13.6`（Nuxt4 官方运行时）                                                                                  | **2.13.4 只适配 Nuxt3，不可钉到 Nuxt4**                                                 |
+| `buildDir`                                               | `".nuxt"`                                                                                                     | F50 内容库空 + Windows 畸形外部化路径（Nuxt4.6 默认迁 buildDir 到 node_modules/.cache） |
+| `@popperjs/core`                                         | `npm:@sxzz/popperjs-es@^2.11.8`                                                                               | 真实包为 CJS，nitro 外部化报 named-export `placements`                                  |
+| `nitro.externals.inline`                                 | 多版本包族（ufo/devalue/entities/hookable/unhead/parse5/source-map-js/vue-bundle-renderer/h3 + popper/UI 族） | 闭包 symlink 归零                                                                       |
+| `pnpm.overrides`                                         | `entities:^7.0.1`、`source-map-js:^1.2.1`                                                                     | dedupe 多版本，避免 linkPackage 绝对 symlink                                            |
+| `vite.optimizeDeps.exclude` + `ssr.optimizeDeps.exclude` | `@tailwindcss/oxide*`                                                                                         | Vite8 rolldown 把原生 .node 当 UTF-8 解析致 dev hydration 卡死                          |
+| `pnpm-workspace.yaml`                                    | 仅 packages + allowBuilds + 2 条 dedupe override                                                              | 无脏钉版                                                                                |
+
+**部署铁律**：
+
+1. **Windows 构建产物不可移植**（symlink=0 仍含构建机绝对路径，上 Vercel Linux 即 500）→ **必须 Linux 构建**（CI prebuilt）。
+2. **hoist 是反模式**（nuxt#13644 破坏 NFT 追踪）；不要靠 shamefully-hoist/node-linker=hoisted 修闭包。
+3. **每次 push main 触发 Vercel Git 自动生产部署**，会覆盖手动 promote；上线 Nuxt4 前须暂停 Git 自动部署（`vercel git disconnect`）改走 CI prebuilt。
+4. 恢复生产保活：`vercel promote <Nuxt3良好部署URL> --yes`。
+
 ## 1. 升级前后版本矩阵
 
 | 包                    | 升级前                          | 升级后                    | 说明                                                   |
