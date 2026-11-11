@@ -78,6 +78,10 @@ export default defineNuxtConfig({
 	},
 
 	nitro: {
+		// Vercel NFT 闭包不含外部化包的传递依赖（ufo/entities），将导入方内联进 server bundle
+		externals: {
+			inline: ["vue-bundle-renderer", "parse5"],
+		},
 		prerender: {
 			// document-driven 模式必须预渲染，否则运行时 content 数据库为空
 			crawlLinks: true,
