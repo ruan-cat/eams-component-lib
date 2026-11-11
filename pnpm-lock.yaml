@@ -324,7 +324,7 @@ importers:
         specifier: workspace:*
         version: link:../vue-element-cui
       "@popperjs/core":
-        specifier: npm:@sxzz/popperjs-es@^2.11.8
+        specifier: ^2.11.8
         version: "@sxzz/popperjs-es@2.11.8"
       "@vueuse/core":
         specifier: ^14.3.0
