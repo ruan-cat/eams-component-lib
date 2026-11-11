@@ -3,7 +3,7 @@
 	"tasks": {
 		"build:vercel": {
 			"dependsOn": ["^build"],
-			"cache": true,
+			"cache": false,
 			"outputs": [".vercel/output/**"]
 		},
 		"move-vercel-output-to-root": {
