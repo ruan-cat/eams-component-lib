@@ -279,3 +279,17 @@ Nuxt4 依赖升级与本地验收**已完成**；Vercel 上线的剩余阻塞是
 **已知 minor（cosmetic，不阻塞访问与使用）**：header logo 经 `/_ipx/_/logo.svg`、`logo-dark.svg` 404（@nuxt/image ipx 在 Vercel 对 SVG 优化失败）。后续可将 logo 改 plain `<img>` 或配置 image provider 绕过 ipx。
 
 **复用要点**：Nuxt4 + shadcn-docs-nuxt 上 Vercel 的完整可行配方 = §0.5 配置组合 + **element-plus 全 UI 链 inline** + **Linux CI prebuilt 部署**（Git 自动部署须暂停）。Windows 本地产物仅用于 dev/preview 验收。
+
+## 15. 无假阳性三环境复核 + nitro v3/h3 v2 API 包
+
+**三环境独立起服务 + 真实 Chrome 交互 + console 三重验证**（排除假阳性）：
+
+| 环境                  | 版本证据                                                                 | 交互证据                                         | console                          |
+| --------------------- | ------------------------------------------------------------------------ | ------------------------------------------------ | -------------------------------- |
+| dev :3000             | 日志 `Nuxt 4.6.4 (with Nitro 2.13.6, Vite 8.3.7)`；`@vite/client` 在     | el-table 1/3 行、代码面板切换、暗色切换、侧栏 29 | 零 error                         |
+| preview :3210         | `.output/nitro.json` framework nuxt 4.6.4、preset node-server            | el-table 1/3 行、代码面板、暗色切换              | —                                |
+| 生产 vec.ruan-cat.com | CI 从 main(Nuxt4) 部署、Git 已断开；页面体量 58068B(Nuxt4)≠Nuxt3 503672B | el-table 1/3 行、代码面板切换                    | 仅 logo `/_ipx/` 404（cosmetic） |
+
+> entry 哈希本地与生产不同属 Linux CI 重构建的平台差异，非假阳性信号；生产身份由"CI 从 main 部署 + Git 断开 + Nuxt4 体量页面"三重认定。
+
+**nitro v3 + h3 v2 API 包**（`packages/api`，repro 双应用架构）：`nitro 3.0.261103-rc` + `h3 2.0.8`，`serverDir:"server"` + `server/routes/health.get.ts`（`defineHandler`）。`nitro build` exit 0，`/health` 返回 `{"ok":true,"nitro":3,"h3":2}`。**项目级 nitro=v3、h3=v2 成立（验收 2/3）**；文档站保持 Nuxt4 官方运行时（nitropack2/h3v1 为 Nuxt 内置，不可替换）。
