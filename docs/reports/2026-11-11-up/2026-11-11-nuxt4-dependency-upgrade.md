@@ -209,3 +209,24 @@ db70bc9 📦 deps(nuxt-doc)!: 升级 Nuxt 4 与 shadcn-docs-nuxt 全量最新依
 ### 12.4 生产最终态
 
 `vercel promote` 回升级前 Nuxt3 良好部署（`dpl_HEML5X9vuovUZsSEXi862veRzQYx`），全路由 cache-busted 复核 200（/、/getting-started、/components/data-display/table、/guidelines/component-design、/updates/changelog）。**生产可用；Nuxt4 成果保留在 main 与本地，待部署路径决策后上线。**
+
+## 13. 三轮深挖（memorix embedding + git 历史 + R53/F41 原始材料）与最终方案
+
+### 13.1 repro 既有经验（memorix #6155/#6152 + git 65c31d4/c119a0a/44051cc + R53.md）
+
+- **R53/F41 verified**：Linux 产物 symlink 为**相对路径**（`css-tree -> .nitro/css-tree@2.3.1`，21B，可移植）；Windows 为**构建机绝对路径**（110B，换机即断，与 R22 `file://` 同族）。workspace 包被 bundle 内联、产物内无 workspace symlink。**repro 部署链走云端 Linux 构建，不经 Windows 产物，故无运行时故障。**
+- **R52/F50**：Nuxt4 主 bundle buildDir 被改写为 `node_modules/.cache/nuxt/.nuxt` ⇒ content devStorage 基址错位 ⇒ 内容库空。本仓以 `buildDir:".nuxt"` 修复（与 R52 根因一致）。
+- **nitropack 版本矩阵**：repro 绿 CI/Vercel 为 **Nuxt3 + nitropack 2.13.4**；2.13.5 引入 unstorage key 校验回归（R46）。**实测 nitropack 2.13.4 与 Nuxt4.6.4 的 `@nuxt/nitro-server` API 不兼容（本地 500），故 Nuxt4 不能钉 2.13.4**；Nuxt4 须用 2.13.6。
+- **popper CJS**：真实 `@popperjs/core` 为 CJS，nitro 外部化时 named-export `placements` 报错；历史实证修法是 npm alias `@sxzz/popperjs-es`（ESM）。已恢复。
+
+### 13.2 最终配置组合（本地全绿）
+
+`nuxt 4.6.4 + nitropack 2.13.6 + buildDir:".nuxt" + popper ESM alias + externals.inline(多版本包族) + overrides dedupe(entities/source-map-js) + oxide exclude`。本地 node-server 4 路由 200、测试 12/12、`.func` symlink=0。
+
+### 13.3 可靠部署路径（已落地 workflow，待 secrets）
+
+新增 [`.github/workflows/deploy-vercel-prebuilt.yaml`](../../../.github/workflows/deploy-vercel-prebuilt.yaml)（**workflow_dispatch 专用，零 push 触发**，与 repro artifact-dump 同模式）：ubuntu + Node22 + pnpm12 冻结安装 → `turbo run do-build-nuxt-doc --force --concurrency=1` → 校验产物绝对 symlink=0 → `vercel deploy --prebuilt --prod`。需在仓库 Secrets 配置 `VERCEL_TOKEN/VERCEL_ORG_ID/VERCEL_PROJECT_ID` 后手动触发；并建议暂停 Vercel Git-integration 自动生产部署以避免双部署冲突。
+
+### 13.4 结论
+
+Nuxt4 依赖升级与本地验收**已完成**；Vercel 上线的剩余阻塞是**云端 Git 构建的 nitro/pnpm 闭包追踪回归**（非本仓配置可解），repro 亦未在其上部署过 Nuxt4（F48/F50 上游 #36792 待修复）。**合理方案 = Linux CI prebuilt 部署**（已提供 workflow），或待上游修复后恢复 Git-integration。生产当前运行 Nuxt3 良好部署，可用。
