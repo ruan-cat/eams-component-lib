@@ -66,6 +66,7 @@ export default defineNuxtConfig({
 
 	// Vite 8 的 rolldown 依赖优化器会把 @tailwindcss/oxide 的原生 .node 当 UTF-8 JS 解析而崩溃，
 	// 留下半写的 deps 缓存（nostics.js 永久 pending），dev 客户端模块图卡死、hydration 失效。
+	// 2026-11-14 冷缓存 A/B 复测：移除即复现 UNLOADABLE_DEPENDENCY（rolldown 1.2.18）dev 503；保留则全绿。
 	vite: {
 		optimizeDeps: {
 			exclude: ["@tailwindcss/oxide", "@tailwindcss/oxide-win32-x64-msvc"],
