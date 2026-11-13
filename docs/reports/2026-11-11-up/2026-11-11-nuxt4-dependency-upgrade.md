@@ -98,6 +98,8 @@ ERROR [unhandledRejection] Error during dependency optimization:
 
 **修复**：`vite.optimizeDeps.exclude` 与 `vite.ssr.optimizeDeps.exclude` 均排除 `@tailwindcss/oxide`、`@tailwindcss/oxide-win32-x64-msvc`；并清掉 `node_modules/.cache/vite` 后重启。修复后 oxide 报错计数 0，dev hydration 全绿。
 
+**2026-11-14 冷缓存 A/B 复测**（vite 8.3.7 / rolldown 1.2.18 / oxide 4.3.5=最新）：移除 exclude 立即复现 `UNLOADABLE_DEPENDENCY`、dev 503；保留则 oxide 0 + 真实浏览器水合全绿（el-table 3 行 / 侧栏 29 / `__vue_app__` true）。该块是 **dev 侧精确守卫**：dev 直跑 `nuxt dev` 不经 turbo，与 turbo 缓存/dist 产物无关，也不影响云端构建。**删除条件** = vite/rolldown 上游修复后（8.3.8+）冷缓存复测通过；在此之前保留，非过时配置。
+
 **排查教训**：dev"页面能打开"≠"可用"。必须用真实浏览器验证**交互**（按钮状态变化、表格行数、主题 class 切换），并用网络面板找 `[pending]` 的优化依赖请求；console 干净不代表模块图健康。
 
 ## 4. Nitro v3 / h3 v2 实验：生态结构性不可行（今日实测）
