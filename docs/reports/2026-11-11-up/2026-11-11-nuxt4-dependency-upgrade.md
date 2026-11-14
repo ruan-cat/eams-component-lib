@@ -6,16 +6,18 @@
 
 ## 0. 结论速览
 
-| 验收项                                  | 结果                                                                                                             | 证据                                                                                                                           |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| 1. 内置 Nuxt 为 4 而非 3                | ✅ 达成                                                                                                          | `nuxt@4.6.4`（构建横幅 `Nuxt 4.6.4 (with Nitro 2.13.6, Vite 8.3.7 and Vue 3.5.45)`）                                           |
-| 2. Nitro 必须 v3                        | ❌ **生态不可行**（实测判定，见 §4）                                                                             | 强制 `nitropack→npm:nitro@3.0.261103-rc` 后 `nuxt prepare`/build 均 exit 1：`Loading @nuxt/nitro-server server builder failed` |
-| 3. h3 必须高版本(v2)                    | ❌ **生态不可行**（实测判定，见 §4）                                                                             | 单独 override `h3:^2.0.8` 同样 exit 1，同一报错                                                                                |
-| 4. 清缓存+重装后 dev/preview 浏览器可用 | ✅ 达成                                                                                                          | 全量隔离 node_modules/.turbo/dist/.nuxt/.vercel-output 后冷装；dev(3000)/preview(3210) 真实 Chrome 交互全绿（§5）              |
-| 5. 分类提交 + 部署后生产可用            | ⚠️ 部分：14 个分类提交完成；Nuxt4 部署 Vercel 被上游阻塞（§11），生产已 promote 回升级前良好部署并浏览器复核可用 | 见 §11                                                                                                                         |
-| 6. 本报告                               | ✅                                                                                                               | 本文件                                                                                                                         |
+| 验收项                                  | 结果                                                                                                                           | 证据                                                                                                                           |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| 1. 内置 Nuxt 为 4 而非 3                | ✅ 达成                                                                                                                        | `nuxt@4.6.4`（构建横幅 `Nuxt 4.6.4 (with Nitro 2.13.6, Vite 8.3.7 and Vue 3.5.45)`）                                           |
+| 2. Nitro 必须 v3                        | ✅ 项目级达成（双应用，见 §15）；强塞 docs 运行时不可行（§4）                                                                  | 强制 `nitropack→npm:nitro@3.0.261103-rc` 后 `nuxt prepare`/build 均 exit 1：`Loading @nuxt/nitro-server server builder failed` |
+| 3. h3 必须高版本(v2)                    | ✅ 项目级达成（双应用，见 §15）；强塞 docs 运行时不可行（§4）                                                                  | 单独 override `h3:^2.0.8` 同样 exit 1，同一报错                                                                                |
+| 4. 清缓存+重装后 dev/preview 浏览器可用 | ✅ 达成                                                                                                                        | 全量隔离 node_modules/.turbo/dist/.nuxt/.vercel-output 后冷装；dev(3000)/preview(3210) 真实 Chrome 交互全绿（§5）              |
+| 5. 分类提交 + 部署后生产可用            | ✅ 达成：分类提交完成；Nuxt4 已上线生产（§14），现行通道 Git-integration push 即部署（§17），生产真实浏览器复核全绿（§15/§17） | 见 §11                                                                                                                         |
+| 6. 本报告                               | ✅                                                                                                                             | 本文件                                                                                                                         |
 
-**核心发现：过去堆在 `nuxt.config.ts` / `pnpm-workspace.yaml` 里的大量"脏补丁"，治的都是症状；真正的根因只有两处（Nuxt 4.6 的 buildDir 迁移、Vite 8 rolldown 对原生 addon 的优化崩溃），各用一行/一段配置即可根治。** 升级后 `pnpm-workspace.yaml` 零 overrides，`nuxt.config.ts` 从 124 行降到 ~80 行且不含任何 noExternal/alias/shim。
+**核心发现（最终裁决）：脏补丁治的都是症状；真根因三处——Nuxt 4.6 buildDir 迁移（F50）、Vite 8 rolldown 对原生 addon 的优化崩溃（oxide）、element-plus 外部化 + popper alias 闭包缺包——各以一项精确配置根治（buildDir / 双 exclude / 条件准入 inline 全 UI 链），并以 overrides dedupe 源头消多版本 symlink。** 中间态曾写「零 overrides、~80 行」，后由 §12.2 订正；最终配方以 §0.5 为准，通道误归因教训见 §18。
+
+> **阅读指南（2026-11-14 补）**：现行态以 §0.5 配方 + §14/§15 上线与复核 + §17 通道裁决 + §19 traceInclude/oxide 裁决为准。§11–§13 为历史中间态（含两包 inline 等不完全 hack、「上游阻塞」结论），保留作反面教材，**不得作现行态引用**；`docs/prompts/index.md:364` 引用的两包 inline snippet 同属中间态，现行配置以 `nuxt.config.ts:91-124` 为准。
 
 ## 0.5 核心落地经验（可直接复用到其他 shadcn-docs-nuxt / Nuxt 项目）
 
