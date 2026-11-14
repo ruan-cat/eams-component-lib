@@ -190,7 +190,7 @@ compatibilityDate: {
 
 提供 prettier 的 pr 模板，把 `.agents\skills\record-bug-fix-memory` 迁移到正确的位置，该位置过时过期了。
 
-## 008 <!-- TODO: qoder cn --> 根据现成的关键经验，对本项目的依赖做合理的升级，并解决 shadcn-docs-nuxt 系列依赖故障
+## 008 <!-- 已完成 qoder cn --> 根据现成的关键经验，对本项目的依赖做合理的升级，并解决 shadcn-docs-nuxt 系列依赖故障
 
 1. 用 memorix+embedding 模型，在 `D:\code\ruan-cat\shadcn-docs-nuxt-production-repro` 项目内，获取到关于 shadcn-docs-nuxt 文档框架必要的沉淀和经验教训。
 2. 在 shadcn-docs-nuxt-production-repro 项目内阅读其内部的文档体系，认真获取其依赖升级的处理方案。
