@@ -237,11 +237,84 @@ rimraf -g '**/{node_modules,package-lock.json,pnpm-lock.yaml}'
 
 ---
 
-<!-- TODO: -->
+你用 Windows symlink、nitro 等关键词，继续在 shadcn-docs-nuxt-production-repro 项目做穷尽的 memorix 检索，然后给我合理的解决方案。我不相信这个项目内没有合理的经验教训。
+
+- 用 memorix cli 和 memorix MCP 做好检索
+- 看看 git 历史记录写的信息。
+- 看看目标项目的 markdown 文档体系。
+
+继续做好解决 D:\code\ruan-cat\eams-component-lib 项目的依赖升级问题。
+
+---
+
+已验证绿的最终配置组合（本地 dev/preview/测试全绿）：
+
+nuxt 4.6.4 + nitropack 2.13.6（Nuxt4 官方运行时；2.13.4 只适配 Nuxt3，不可钉）
+buildDir: ".nuxt"（修 F50 内容库空 + Windows 畸形外部化路径）
+@popperjs/core: npm:@sxzz/popperjs-es（ESM alias，修 CJS named-export）
+externals.inline 多版本包族 + overrides dedupe entities/source-map-js（闭包 symlink 归零）
+optimizeDeps.exclude oxide（修 Vite8 dev hydration 卡死）
+pnpm-workspace.yaml 仅 packages + allowBuilds + 2 条 dedupe override（无脏钉版）
+
+1. 把你写的这一大堆核心的关键落地经验，都记录到 docs\reports\2026-11-11-up\ 目录内，适当的改写文档。
+2. 然后再 memorix 内做必要的，关键的经验教训落地。做好这个记忆存储。
+3. 需配置 VERCEL_TOKEN/VERCEL_ORG_ID/VERCEL_PROJECT_ID secrets 并暂停 Vercel Git 自动生产部署后手动触发。
+   - 我现在授权你这样做。
+   - 你自己通过在 `D:\code\ruan-cat\eams-component-lib` 目录内做合理的 vercel pull 命令，拉取环境变量和项目配置后，得到必要的 VERCEL_ORG_ID 和 VERCEL_PROJECT_ID，然后你用 gh cli 来设置正对 eams-component-lib 项目的环境变量。
+
+---
+
+你现在是确定基于 nuxt4 以及大部分能升级的依赖包，在本地 dev 和 preview、云端 vercel 生产环境内，都能在浏览器内正常访问运行是么？你确定你没有做假阳性的排查？
+
+---
+
+你认真的检查一下最近 2026-11-12 和 2026-11-11 的 git commit，你的很多修改岂不是一开始过于激进，后面又开始灰溜溜的把你删掉的东西又不得不补全回来了。你一开始的做法是不是太激进了？太小丑了？搞得你自己不停的返工。你自己的调研是不是太草率了？那么快就得出结论？
+模拟反反复复修的这些问题，不是在全局技能内都讲过了么？
+
+---
+
+### 2026-11-12 处理 .github\workflows\deploy-vercel-prebuilt.yaml
+
+我要求你专门跟我谈谈，为什么你要设计 .github\workflows\deploy-vercel-prebuilt.yaml 这个工作流？你想解决的是什么问题呢？
+
+---
+
+我授权你现在开始。B 简化对照实验：重连 Git-integration，用含 inline 修复的 main 触发一次云端自建，实测是否 200。若绿→删除工作流+恢复 Git 自动部署（最简）；若红→保留工作流并坐实"云端追踪不可靠"。
+
+---
+
+把你遇到的这个误区，及时的写到 docs\reports\2026-11-11-up\2026-11-11-nuxt4-dependency-upgrade.md 内；
+及时在 memorix 内，写清楚你做的这个误区。你出现了绕远路的误区，所以你有必要把这个关键的经验教训写到 memorix 内。
+
+### 2026-11-12 整体更新迭代一次全局技能 init-shadcn-docs-nuxt
+
+我们本轮对话产生了非常多关键的经验教训，和可复用的经验。
+我要求你根据 `docs\reports\2026-11-11-up\2026-11-11-nuxt4-dependency-upgrade.md` 文档，本轮对话内涉及到的关键内容，和你遇到的各种各样的误区与经验教训，和你和存储到 memorix 内的记忆与决策，都给我在 init-shadcn-docs-nuxt 技能内落地。我们要升级好 init-shadcn-docs-nuxt 技能。
+
+对于 monorepo 项目，这个全局 skills 修改、维护、重新发布、和下载的`技能迭代任务`。你安排一个独立的子代理去独立完成，因为全局技能的迭代升级不属于本会话的核心任务，属于支线任务，所以按照以下严格的标准流程去做：
+
+1. 在本机内找到 github `ruan-cat/monorepo` 仓库对应的项目。路径大多数情况在 `D:\code\ruan-cat\monorepo` 目录内。
+2. 在目录内，找到你要维护修改的技能，编写修改完技能后，用 `release-ai-plugins` 技能，编写 json 版本文件、apply 应用变更日志的修改；
+3. 然后你在 monorepo 项目内，用全局技能 git-commit，分门别类编写提交信息。然后 git push。
+4. 在 monorepo 项目内，用 gh cli 监听 push 触发的工作流，是否出现了明显错误。只要没错误就行。
+5. 在 monorepo 的 github 项目没有错误的前提下，快速运行命令，立刻安装全局技能：
+   `skills add https://github.com/ruan-cat/monorepo/tree/dev/ai-plugins/dev-skills/skills --skill '*' -g -y -a claude-code -a codex`
+   `skills add https://github.com/ruan-cat/monorepo/tree/dev/ai-plugins/common-tools/skills --skill '*' -g -y -a claude-code -a codex`
+6. 运行上述 skills 安装命令时，直接运行，不要在简单 skills 命令上面纠结。
+
+### 2026-11-12 旧记录设计的询问与确定
+
+这个问题你现在能处理么？你能及时更新 memorix 的旧历史记录么？
+`memorix 交叉核对：#6261–#6264 的「云端构建不可靠」中间结论已被 #6267/#6268 B 实验作废——新 reference 一律以最终裁决态撰写，作废结论仅在误区时间线中标注存档。`
+
+---
 
 面对现在的 externals.traceInclude，面对现在的本地与云端 vercel 依赖构建差异问题，你现在能结合过往 memorix 内的经验教训，给我一个你更新后的实战结论么？你打算该这么完成优雅的，免 hack 的依赖配置呢？你能直接更新 `docs\reports\2026-11-11-up\2026-11-11-nuxt4-dependency-upgrade.md` 报告么？
+针对 `externals.inline 多版本包族 + overrides dedupe entities/source-map-js（闭包 symlink 归零）` 这个关键的经验教训，你之前说的这个 `externals.traceInclude` 的解决方案是不是已经过时了，错误了？应对不了新的情况了？
+我们的 docs\reports\2026-11-11-up\2026-11-11-nuxt4-dependency-upgrade.md 是不是已经有成熟的解决方案了？
+我们的 memorix 内是不是有正式的解决方案了？
 
-<!-- TODO: -->
+### 2026-11-12 上午继续
 
 ```markdown
 截至今天，Nuxt 最新版 4.6.4 仍绑定 nitropack ^2.13.6 + h3 ^1.15.11，没有任何 Nuxt 版本跑在 nitro v3 上
@@ -272,9 +345,19 @@ D:\code\ruan-cat\shadcn-docs-nuxt-production-repro\apps\api\package.json 用的�
 
 在 D:\code\ruan-cat 内，还有哪个 git 项目使用了 shadcn-docs-nuxt 这个依赖包？我不太记得了。
 
----
+请问上述的内容，对于我们现在的本地与云端都成功的情况来说，是不是都过时了？请你认真严格的回答我，诚实的反驳我。用事实讲话。
 
-<!-- TODO: -->
+### 2026-11-14
+
+1. `pnpm isolated 布局下两代 h3 各锁各的包图，互不串味。` 我们现在全局技能 C:\Users\pc.agents\skills\init-shadcn-docs-nuxt ，init-shadcn-docs-nuxt 的情况如何啊？有没有专门说明清楚这个情况，我们既然是多个子包内使用不同的 nitro 依赖包的版本，那么我们的技能有没有专门的指导这个部分呢？
+2. D:\code\ruan-cat\shadcn-docs-nuxt-production-repro 项目有没有专门记录这个相关的实验呢？
+3. 我们的全局 memorix 记录过这个问题么？
+4. 「云端不可靠/必须 CI prebuilt/Git 断开」 过时，已作废
+   - 你有及时地更新 markdown 么？有用 memorix 的工具实现旧 memorix 记忆的及时跟正和改写么？
+5. traceInclude 过时，已作废
+   - 你有及时地更新 markdown 么？有用 memorix 的工具实现旧 memorix 记忆的及时跟正和改写么？
+
+---
 
 ```plain
 	nitro: {
@@ -288,9 +371,13 @@ D:\code\ruan-cat\shadcn-docs-nuxt-production-repro\apps\api\package.json 用的�
 
 ---
 
-<!-- TODO: -->
-
 `机制实锤：.func/node_modules 里是指向 Windows 绝对路径的 symlink（/d/code/…/.nitro/<pkg>@<ver>），因 devalue/hookable/ufo/entities 等存在多版本，nitro 用 linkPackage 建链接；上传到 Linux Vercel 后这些 Windows 绝对链接全部失效 → 逐包缺包。本地 Windows 能解析所以"本地绿"。修法：把这一组多版本包目标性 inline 进 bundle，消除 symlink。`
 我记得我们的 shadcn-docs-nuxt-production-repro 项目曾经是有关于这个部分的经验教训的，你是不是用 memorix 检索的时候不到位，所以才在本项目再次犯错呢？
+
+### 2026-11-14 继续完成你的剩余 goal 任务
+
+我们现在距离 goal 任务还差哪一个部分，你先跟我汇报清楚 goal 整体进度的情况。
+
+我们现在的全局技能，你确定已经完整记录了整个回话的必要的升级举措，和经验教训么？我要求你很仔细的复盘整个回话，仔细研读全局技能 C:\Users\pc.agents\skills\init-shadcn-docs-nuxt 的情况。一句一行的窒息揣摩推敲。最后给我一个阶段性的汇报报告，说明清楚本技能的指导能力差距。因为我稍后就要用这个技能去升级另一个 D:\code\ruan-cat\SmallAliceWeb 项目内的 shadcn-docs-nuxt 子包。我不想因为脱离了本次会话的上下文，就导致我在新的项目内再出现这样的情况。
 
 ## 009 <!-- TODO: -->
